@@ -1,0 +1,10 @@
+[System]
+#LogLevel="info"
+#Packages="systemd,dbus,iproute2,tdnf,photon-release,photon-repos,curl,shadow,ncurses-terminfo,iputils"
+#Release="4.0"
+
+[Network]
+#Kind = "macvlan"
+#ParentLink="eth0"
+#AddressPool="192.168.1.1/24"
+#PoolOffset=64
