@@ -1,4 +1,3 @@
-
 # Contributing to photon-os-container-builder
 
 The photon-os-container-builder project team welcomes contributions from the community. Before you start working with photon-os-container-builder, please
@@ -19,7 +18,7 @@ This is a rough outline of what a contributor's workflow looks like:
 Example:
 
 ``` shell
-git remote add upstream https://github.com/vmware/photon-os-container-builder.git
+git remote add upstream https://github.com/vmware-samples/photon-os-container-builder.git
 git checkout -b my-new-feature main
 git commit -a
 git push origin my-new-feature
