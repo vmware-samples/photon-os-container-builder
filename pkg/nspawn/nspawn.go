@@ -34,6 +34,7 @@ func Spawn(c string, dir bool) (err error) {
 }
 
 func ThunderBolt(c *conf.Config, container string, ephemeral bool, machine bool, network bool) (err error) {
+	capability := "--capability=CAP_SYS_ADMIN,CAP_NET_ADMIN,CAP_MKNOD"
 	var netDev string
 
 	if network {
@@ -47,29 +48,29 @@ func ThunderBolt(c *conf.Config, container string, ephemeral bool, machine bool,
 	if network {
 		if ephemeral {
 			if machine {
-				err = system.ExecAndRenounce(nspawn, "-xD", container, "-M", container, netDev)
+				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, "-M", container, netDev)
 			} else {
-				err = system.ExecAndRenounce(nspawn, "-xD", container, netDev)
+				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, netDev)
 			}
 		} else {
 			if machine {
-				err = system.ExecAndRenounce(nspawn, "-D", container, "-M", container, netDev)
+				err = system.ExecAndRenounce(nspawn, capability, "-D", container, "-M", container, netDev)
 			} else {
-				err = system.ExecAndRenounce(nspawn, "-D", container, netDev)
+				err = system.ExecAndRenounce(nspawn, capability, "-D", container, netDev)
 			}
 		}
 	} else {
 		if ephemeral {
 			if machine {
-				err = system.ExecAndRenounce(nspawn, "-xD", container, "-M", container)
+				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, "-M", container)
 			} else {
-				err = system.ExecAndRenounce(nspawn, "-xD", container)
+				err = system.ExecAndRenounce(nspawn, capability, "-xD", container)
 			}
 		} else {
 			if machine {
-				err = system.ExecAndRenounce(nspawn, "-D", container, "-M", container)
+				err = system.ExecAndRenounce(nspawn, capability, "-D", container, "-M", container)
 			} else {
-				err = system.ExecAndRenounce(nspawn, "-D", container)
+				err = system.ExecAndRenounce(nspawn, capability, "-D", container)
 			}
 		}
 
@@ -83,6 +84,7 @@ func ThunderBolt(c *conf.Config, container string, ephemeral bool, machine bool,
 }
 
 func Boot(c *conf.Config, container string, ephemeral bool, network bool) (err error) {
+	capability := "--capability=CAP_SYS_ADMIN,CAP_NET_ADMIN,CAP_MKNOD"
 	var netDev string
 
 	if network {
@@ -95,15 +97,15 @@ func Boot(c *conf.Config, container string, ephemeral bool, network bool) (err e
 
 	if network {
 		if ephemeral {
-			err = system.ExecAndRenounce(nspawn, "-xbD", container, netDev)
+			err = system.ExecAndRenounce(nspawn, capability, "-xbD", container, netDev)
 		} else {
-			err = system.ExecAndRenounce(nspawn, "-bD", container, netDev)
+			err = system.ExecAndRenounce(nspawn, capability, "-bD", container, netDev)
 		}
 	} else {
 		if ephemeral {
-			err = system.ExecAndRenounce(nspawn, "-xbD", container, netDev)
+			err = system.ExecAndRenounce(nspawn, capability, "-xbD", container, netDev)
 		} else {
-			err = system.ExecAndRenounce(nspawn, "-bD", container, netDev)
+			err = system.ExecAndRenounce(nspawn, capability, "-bD", container, netDev)
 		}
 	}
 	if err != nil {
