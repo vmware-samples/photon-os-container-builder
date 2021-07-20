@@ -1,6 +1,5 @@
-/* SPDX-License-Identifier: Apache-2.0
- * Copyright © 2021 VMware, Inc.
- */
+// SPDX-License-Identifier: BSD-2
+// Copyright 2021 VMware, Inc.
 
 package network
 

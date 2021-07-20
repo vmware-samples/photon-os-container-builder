@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: BSD-2
+// Copyright 2021 VMware, Inc.
+
 package network
 
 import (
