@@ -3,7 +3,6 @@
 ***containerctl*** is CLI tool which spawns Photon OS in a light-weight container. It uses `systemd-nspawn` to jump start Photon OS containers. The primary
 use case for ***containerctl*** is to run Photon OS test cases in isolated environment.
 
-
 ```
 > sudo containerctl spawn test55
 
@@ -53,7 +52,8 @@ COMMANDS:
 #### Build
 ```
 ❯  make build
-❯  make install
+❯  sudo make install
+❯  sudo tdnf install systemd-container
 ```
 
 
