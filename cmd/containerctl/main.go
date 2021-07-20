@@ -94,13 +94,19 @@ func main() {
 					Aliases: []string{"n"},
 					Usage:   "Disconnect networking of the container from the host (private network)",
 				},
+				&cli.StringFlag{
+					Name:    "link",
+					Aliases: []string{"l"},
+					Usage:   "Assign the specified network interface to the container",
+				},
 			},
+
 			Action: func(c *cli.Context) error {
 				if c.NArg() != 1 {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := container.Boot(cfg, conf.DefaultStorageDir, c.Args().First(), c.Bool("ephemeral"), c.Bool("network"))
+				err := container.Boot(cfg, conf.DefaultStorageDir, c.Args().First(), c.String("link"), c.Bool("ephemeral"), c.Bool("network"))
 				if err != nil {
 					os.Exit(1)
 				}
@@ -127,13 +133,18 @@ func main() {
 					Aliases: []string{"n"},
 					Usage:   "Disconnect networking of the container from the host (private network)",
 				},
+				&cli.StringFlag{
+					Name:    "link",
+					Aliases: []string{"l"},
+					Usage:   "Assign the specified network interface to the container",
+				},
 			},
 			Action: func(c *cli.Context) error {
 				if c.NArg() < 1 {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := container.JumpStart(cfg, conf.DefaultStorageDir, c.Args().First(), c.Bool("ephemeral"), c.Bool("machine"), c.Bool("network"))
+				err := container.JumpStart(cfg, conf.DefaultStorageDir, c.Args().First(), c.String("link"), c.Bool("ephemeral"), c.Bool("machine"), c.Bool("network"))
 				if err != nil {
 					fmt.Println(err)
 					os.Exit(1)

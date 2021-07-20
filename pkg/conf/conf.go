@@ -17,7 +17,8 @@ const (
 	DefaultPackages       = "systemd,dbus,iproute2,tdnf,photon-release,photon-repos,curl,shadow,ncurses-terminfo"
 
 	DefaultParentLink  = "eth0"
-	DefaultNetworkKind = "macvlan"
+	DefaultNetworkKind = "link"
+	DefaultLink        = "eth1"
 	DefaultAddressPool = "172.16.85.50/24 "
 	DefaultPoolOffSet  = 64
 
@@ -29,6 +30,7 @@ const (
 // Config file key value
 type Network struct {
 	Kind        string `mapstructure:"Kind"`
+	Link        string `mapstructure:"Link"`
 	ParentLink  string `mapstructure:"ParentLink"`
 	AddressPool string `mapstructure:"AddressPool"`
 	PoolOffset  int    `mapstructure:"PoolOffset "`
@@ -55,6 +57,7 @@ func Parse() (*Config, error) {
 
 	viper.SetDefault("Network.AddressPool", DefaultAddressPool)
 	viper.SetDefault("Network.PoolOffset", DefaultAddressPool)
+	viper.SetDefault("Network.Link", DefaultLink)
 	viper.SetDefault("Network.ParentLink", DefaultParentLink)
 	viper.SetDefault("Network.Kind", DefaultNetworkKind)
 

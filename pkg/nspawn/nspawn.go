@@ -15,6 +15,28 @@ const (
 	nspawn = "/usr/bin/systemd-nspawn"
 )
 
+func determineNetworking(c *conf.Config, link string) (n string) {
+	var netDev string
+
+	if c.Network.Kind == "macvlan" {
+		netDev = "--network-macvlan=photon"
+	} else if c.Network.Kind == "bridge" {
+		netDev = "--network-bridge=photon"
+	} else {
+		if c.Network.Link == "" {
+			netDev = "--network-interface=eth1"
+		} else {
+			if link == "" {
+				netDev = "--network-interface=" + c.Network.Link
+			} else {
+				netDev = "--network-interface=" + link
+			}
+		}
+	}
+
+	return netDev
+}
+
 func Spawn(c string, dir bool) (err error) {
 	err = system.ExecAndDisplay(os.Stdout, "/usr/bin/systemd-machine-id-setup", "--root", c)
 	if err != nil {
@@ -33,16 +55,12 @@ func Spawn(c string, dir bool) (err error) {
 	return nil
 }
 
-func ThunderBolt(c *conf.Config, container string, ephemeral bool, machine bool, network bool) (err error) {
+func ThunderBolt(c *conf.Config, container string, link string, ephemeral bool, machine bool, network bool) (err error) {
 	capability := "--capability=CAP_SYS_ADMIN,CAP_NET_ADMIN,CAP_MKNOD"
 	var netDev string
 
 	if network {
-		if c.Network.Kind == "macvlan" {
-			netDev = "--network-macvlan=photon"
-		} else {
-			netDev = "--network-bridge=photon"
-		}
+		netDev = determineNetworking(c, link)
 	}
 
 	if network {
@@ -83,16 +101,12 @@ func ThunderBolt(c *conf.Config, container string, ephemeral bool, machine bool,
 	return nil
 }
 
-func Boot(c *conf.Config, container string, ephemeral bool, network bool) (err error) {
+func Boot(c *conf.Config, container string, link string, ephemeral bool, network bool) (err error) {
 	capability := "--capability=CAP_SYS_ADMIN,CAP_NET_ADMIN,CAP_MKNOD"
 	var netDev string
 
 	if network {
-		if c.Network.Kind == "macvlan" {
-			netDev = "--network-macvlan=photon"
-		} else {
-			netDev = "--network-bridge=photon"
-		}
+		netDev = determineNetworking(c, link)
 	}
 
 	if network {

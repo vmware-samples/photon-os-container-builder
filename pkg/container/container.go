@@ -36,7 +36,7 @@ func Spawn(base string, c string, release string, packages string, dir bool) err
 	return nspawn.Spawn(d, dir)
 }
 
-func JumpStart(c *conf.Config, base string, container string, ephemeral bool, machine bool, network bool) error {
+func JumpStart(c *conf.Config, base string, container string, link string, ephemeral bool, machine bool, network bool) error {
 	dir := path.Join(base, container)
 
 	if !system.PathExists(dir) {
@@ -44,10 +44,10 @@ func JumpStart(c *conf.Config, base string, container string, ephemeral bool, ma
 		return errors.New("not exist")
 	}
 
-	return nspawn.ThunderBolt(c, dir, ephemeral, machine, network)
+	return nspawn.ThunderBolt(c, dir, link, ephemeral, machine, network)
 }
 
-func Boot(c *conf.Config, storage string, container string, ephemeral bool, network bool) error {
+func Boot(c *conf.Config, storage string, container string, link string, ephemeral bool, network bool) error {
 	dir := path.Join(storage, container)
 
 	if !system.PathExists(dir) {
@@ -55,5 +55,5 @@ func Boot(c *conf.Config, storage string, container string, ephemeral bool, netw
 		return errors.New("not exist")
 	}
 
-	return nspawn.Boot(c, dir, ephemeral, network)
+	return nspawn.Boot(c, dir, link, ephemeral, network)
 }
