@@ -6,6 +6,7 @@ package container
 import (
 	"errors"
 	"fmt"
+	"os"
 	"path"
 
 	"github.com/photon-os-container-builder/pkg/conf"
@@ -13,6 +14,7 @@ import (
 	"github.com/photon-os-container-builder/pkg/rpm"
 	"github.com/photon-os-container-builder/pkg/set"
 	"github.com/photon-os-container-builder/pkg/system"
+	"github.com/photon-os-container-builder/pkg/systemd"
 )
 
 func Spawn(base string, c string, release string, packages string, dir bool) error {
@@ -33,7 +35,12 @@ func Spawn(base string, c string, release string, packages string, dir bool) err
 		return err
 	}
 
-	if err := system.SetupContainerService(c); err != nil {
+	if err := system.ExecAndDisplay(os.Stdout, "/usr/bin/systemd-machine-id-setup", "--root", c); err != nil {
+		fmt.Printf("Failed to execute systemd-machine-id-setup for '%s': %+v\n", c, err)
+		return err
+	}
+
+	if err := systemd.SetupContainerService(c); err != nil {
 		fmt.Printf("Failed to create unit file for '%s': %+v\n", c, err)
 		return err
 	}

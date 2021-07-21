@@ -4,13 +4,14 @@
 package machinectl
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/photon-os-container-builder/pkg/system"
 )
 
 const (
-	machineCtl = "/usr/bin/machinectl"
+	machineCtl   = "/usr/bin/machinectl"
 	systemctlCtl = "/usr/bin/systemctl"
 )
 
@@ -39,8 +40,12 @@ func ListImageStatus(image string) error {
 }
 
 func RemoveImage(image string) error {
-	err := system.ExecAndDisplay(os.Stdout, machineCtl, "remove", image)
-	if err != nil {
+	if err := system.ExecAndDisplay(os.Stdout, machineCtl, "remove", image); err != nil {
+		return err
+	}
+
+	if err := system.RemoveUnitFile(image); err != nil {
+		fmt.Printf("Failed to remove unit file='%s': +%v\n", image, err)
 		return err
 	}
 
@@ -89,14 +94,6 @@ func Reboot(c string) error {
 
 func Terminate(c string) error {
 	if err := system.ExecAndDisplay(os.Stdout, machineCtl, "terminate", c); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Start(c string) error {
-	if err := system.ExecAndRenounce(systemctlCtl, "start", c); err != nil {
 		return err
 	}
 

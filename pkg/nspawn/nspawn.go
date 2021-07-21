@@ -5,7 +5,6 @@ package nspawn
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/photon-os-container-builder/pkg/conf"
 	"github.com/photon-os-container-builder/pkg/system"
@@ -38,11 +37,6 @@ func determineNetworking(c *conf.Config, link string) (n string) {
 }
 
 func Spawn(c string, dir bool) (err error) {
-	if err = system.ExecAndDisplay(os.Stdout, "/usr/bin/systemd-machine-id-setup", "--root", c);err != nil {
-		fmt.Printf("Failed to execute systemd-machine-id-setup for '%s': %+v\n", c, err)
-		return err
-	}
-
 	if dir {
 		err = system.ExecAndRenounce(nspawn, "-D", c)
 		if err != nil {

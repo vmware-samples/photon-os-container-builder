@@ -10,6 +10,7 @@ import (
 	"github.com/photon-os-container-builder/pkg/conf"
 	"github.com/photon-os-container-builder/pkg/container"
 	"github.com/photon-os-container-builder/pkg/machinectl"
+	"github.com/photon-os-container-builder/pkg/systemd"
 	"github.com/urfave/cli/v2"
 )
 
@@ -160,7 +161,37 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := machinectl.Start(c.Args().First())
+				err := systemd.Start(c.Args().First())
+				if err != nil {
+					os.Exit(1)
+				}
+				return nil
+			},
+		},
+		{
+			Name:  "stop",
+			Usage: "[NAME] stop container as a systemd service unit",
+			Action: func(c *cli.Context) error {
+				if c.NArg() < 1 {
+					cli.ShowAppHelpAndExit(c, 1)
+				}
+
+				err := systemd.Stop(c.Args().First())
+				if err != nil {
+					os.Exit(1)
+				}
+				return nil
+			},
+		},
+		{
+			Name:  "restart",
+			Usage: "[NAME] restart container as a systemd service unit",
+			Action: func(c *cli.Context) error {
+				if c.NArg() < 1 {
+					cli.ShowAppHelpAndExit(c, 1)
+				}
+
+				err := systemd.Stop(c.Args().First())
 				if err != nil {
 					os.Exit(1)
 				}
