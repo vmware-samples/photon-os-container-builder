@@ -107,8 +107,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := container.Boot(cfg, conf.DefaultStorageDir, c.Args().First(), c.String("link"), c.Bool("ephemeral"), c.Bool("network"))
-				if err != nil {
+				if err := container.Boot(cfg, conf.DefaultStorageDir, c.Args().First(), c.String("link"), c.Bool("ephemeral"), c.Bool("network")); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -145,8 +144,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := container.JumpStart(cfg, conf.DefaultStorageDir, c.Args().First(), c.String("link"), c.Bool("ephemeral"), c.Bool("machine"), c.Bool("network"))
-				if err != nil {
+				if err := container.JumpStart(cfg, conf.DefaultStorageDir, c.Args().First(), c.String("link"), c.Bool("ephemeral"), c.Bool("machine"), c.Bool("network")); err != nil {
 					fmt.Println(err)
 					os.Exit(1)
 				}
@@ -161,8 +159,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := systemd.Start(c.Args().First())
-				if err != nil {
+				if err := systemd.Start(c.Args().First()); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -176,8 +173,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := systemd.Stop(c.Args().First())
-				if err != nil {
+				if err := systemd.Stop(c.Args().First()); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -191,8 +187,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := systemd.Stop(c.Args().First())
-				if err != nil {
+				if err := systemd.Stop(c.Args().First()); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -206,8 +201,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := machinectl.Login(c.Args().First())
-				if err != nil {
+				if err := machinectl.Login(c.Args().First()); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -221,8 +215,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := machinectl.Shell(c.Args().First(), c.Args().Get(2))
-				if err != nil {
+				if err := machinectl.Shell(c.Args().First(), c.Args().Get(2)); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -236,8 +229,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := machinectl.CopyFrom(c.Args().First(), c.Args().Get(2), c.Args().Get(3))
-				if err != nil {
+				if err := machinectl.CopyFrom(c.Args().First(), c.Args().Get(2), c.Args().Get(3)); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -274,8 +266,7 @@ func main() {
 			Usage: "List container images",
 			Action: func(c *cli.Context) error {
 
-				err := machinectl.ListImages()
-				if err != nil {
+				if err := machinectl.ListImages(); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -289,8 +280,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := machinectl.ListImageStatus(c.Args().First())
-				if err != nil {
+				if err := machinectl.ListImageStatus(c.Args().First()); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -304,8 +294,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := machinectl.RemoveImage(c.Args().First())
-				if err != nil {
+				if err := machinectl.RemoveImage(c.Args().First()); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -319,8 +308,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := machinectl.CloneImage(c.Args().First())
-				if err != nil {
+				if err := machinectl.CloneImage(c.Args().First()); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -334,8 +322,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := machinectl.RenameImage(c.Args().First())
-				if err != nil {
+				if err := machinectl.RenameImage(c.Args().First()); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -345,8 +332,7 @@ func main() {
 			Name:  "clean",
 			Usage: "Remove all images",
 			Action: func(c *cli.Context) error {
-				err := machinectl.CleanImage()
-				if err != nil {
+				if err := machinectl.CleanImage(); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -360,8 +346,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := machinectl.RemoveImage(c.Args().First())
-				if err != nil {
+				if err := machinectl.RemoveImage(c.Args().First()); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -375,8 +360,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := machinectl.Terminate(c.Args().First())
-				if err != nil {
+				if err := machinectl.Terminate(c.Args().First()); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -390,8 +374,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := machinectl.Reboot(c.Args().First())
-				if err != nil {
+				if err := machinectl.Reboot(c.Args().First()); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -405,8 +388,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := machinectl.PullTar(c.Args().First(), c.Args().Get(2))
-				if err != nil {
+				if err := machinectl.PullTar(c.Args().First(), c.Args().Get(2)); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -420,8 +402,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := machinectl.PullRaw(c.Args().First(), c.Args().Get(2))
-				if err != nil {
+				if err := machinectl.PullRaw(c.Args().First(), c.Args().Get(2)); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -435,8 +416,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := machinectl.ImportTar(c.Args().First(), c.Args().Get(2))
-				if err != nil {
+				if err := machinectl.ImportTar(c.Args().First(), c.Args().Get(2)); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -450,8 +430,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := machinectl.ImportRaw(c.Args().First(), c.Args().Get(2))
-				if err != nil {
+				if err := machinectl.ImportRaw(c.Args().First(), c.Args().Get(2)); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -465,8 +444,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := machinectl.ImportFS(c.Args().First(), c.Args().Get(2))
-				if err != nil {
+				if err := machinectl.ImportFS(c.Args().First(), c.Args().Get(2)); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -480,8 +458,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := machinectl.ExportTar(c.Args().First(), c.Args().Get(2))
-				if err != nil {
+				if err := machinectl.ExportTar(c.Args().First(), c.Args().Get(2)); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -495,8 +472,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				err := machinectl.ExportRaw(c.Args().First(), c.Args().Get(2))
-				if err != nil {
+				if err := machinectl.ExportRaw(c.Args().First(), c.Args().Get(2)); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -504,8 +480,7 @@ func main() {
 		},
 	}
 
-	err := app.Run(os.Args)
-	if err != nil {
+	if err := app.Run(os.Args); err != nil {
 		fmt.Println(err)
 	}
 }
