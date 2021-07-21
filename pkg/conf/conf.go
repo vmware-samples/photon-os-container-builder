@@ -13,6 +13,7 @@ const (
 	DefaultLogLevel       = "info"
 	DefaultReleaseVersion = "4.0"
 	DefaultStorageDir     = "/var/lib/machines"
+	DefaultUnitFilePath   = "/etc/systemd/system"
 	DefaultGPGDir         = "/etc/pki/rpm-gpg"
 	DefaultPackages       = "systemd,dbus,iproute2,tdnf,photon-release,photon-repos,curl,shadow,ncurses-terminfo"
 

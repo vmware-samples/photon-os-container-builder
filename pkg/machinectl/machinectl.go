@@ -11,6 +11,7 @@ import (
 
 const (
 	machineCtl = "/usr/bin/machinectl"
+	systemctlCtl = "/usr/bin/systemctl"
 )
 
 func ListRunningContainers() error {
@@ -95,7 +96,7 @@ func Terminate(c string) error {
 }
 
 func Start(c string) error {
-	if err := system.ExecAndRenounce(machineCtl, "start", c); err != nil {
+	if err := system.ExecAndRenounce(systemctlCtl, "start", c); err != nil {
 		return err
 	}
 

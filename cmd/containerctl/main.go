@@ -154,7 +154,7 @@ func main() {
 		},
 		{
 			Name:  "start",
-			Usage: "[NAME] start in a container",
+			Usage: "[NAME] start container as a systemd service unit",
 			Action: func(c *cli.Context) error {
 				if c.NArg() < 1 {
 					cli.ShowAppHelpAndExit(c, 1)

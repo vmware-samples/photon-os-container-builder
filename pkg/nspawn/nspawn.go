@@ -38,9 +38,8 @@ func determineNetworking(c *conf.Config, link string) (n string) {
 }
 
 func Spawn(c string, dir bool) (err error) {
-	err = system.ExecAndDisplay(os.Stdout, "/usr/bin/systemd-machine-id-setup", "--root", c)
-	if err != nil {
-		fmt.Printf("Failed to execute systemd-machine-id-setup in '%s': %+v\n", c, err)
+	if err = system.ExecAndDisplay(os.Stdout, "/usr/bin/systemd-machine-id-setup", "--root", c);err != nil {
+		fmt.Printf("Failed to execute systemd-machine-id-setup for '%s': %+v\n", c, err)
 		return err
 	}
 

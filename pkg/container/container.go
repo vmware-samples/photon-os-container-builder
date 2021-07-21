@@ -33,6 +33,11 @@ func Spawn(base string, c string, release string, packages string, dir bool) err
 		return err
 	}
 
+	if err := system.SetupContainerService(c); err != nil {
+		fmt.Printf("Failed to create unit file for '%s': %+v\n", c, err)
+		return err
+	}
+
 	return nspawn.Spawn(d, dir)
 }
 
