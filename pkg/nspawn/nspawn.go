@@ -50,6 +50,7 @@ func Spawn(c string, dir bool) (err error) {
 
 func ThunderBolt(c *conf.Config, container string, link string, ephemeral bool, machine bool, network bool) (err error) {
 	capability := "--capability=CAP_SYS_ADMIN,CAP_NET_ADMIN,CAP_MKNOD"
+	machineArg := "--machine=" + container
 	var netDev string
 
 	if network {
@@ -59,29 +60,29 @@ func ThunderBolt(c *conf.Config, container string, link string, ephemeral bool, 
 	if network {
 		if ephemeral {
 			if machine {
-				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, "-M", container, netDev)
+				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, "-M", container, netDev, "--link-journal=try-guest", "U", "--settings=override", machineArg)
 			} else {
-				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, netDev)
+				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, netDev, "--link-journal=try-guest", "U", "--settings=override", machineArg)
 			}
 		} else {
 			if machine {
-				err = system.ExecAndRenounce(nspawn, capability, "-D", container, "-M", container, netDev)
+				err = system.ExecAndRenounce(nspawn, capability, "-D", container, "-M", container, netDev, "--link-journal=try-guest", "U", "--settings=override", machineArg)
 			} else {
-				err = system.ExecAndRenounce(nspawn, capability, "-D", container, netDev)
+				err = system.ExecAndRenounce(nspawn, capability, "-D", container, netDev, "--link-journal=try-guest", "U", "--settings=override", machineArg)
 			}
 		}
 	} else {
 		if ephemeral {
 			if machine {
-				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, "-M", container)
+				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, "-M", container, "--link-journal=try-guest", "U", "--settings=override", machineArg)
 			} else {
 				err = system.ExecAndRenounce(nspawn, capability, "-xD", container)
 			}
 		} else {
 			if machine {
-				err = system.ExecAndRenounce(nspawn, capability, "-D", container, "-M", container)
+				err = system.ExecAndRenounce(nspawn, capability, "-D", container, "-M", container, "--link-journal=try-guest", "U", "--settings=override", machineArg)
 			} else {
-				err = system.ExecAndRenounce(nspawn, capability, "-D", container)
+				err = system.ExecAndRenounce(nspawn, capability, "-D", container, "--link-journal=try-guest", "U", "--settings=override", machineArg)
 			}
 		}
 
@@ -96,6 +97,7 @@ func ThunderBolt(c *conf.Config, container string, link string, ephemeral bool, 
 
 func Boot(c *conf.Config, container string, link string, ephemeral bool, network bool) (err error) {
 	capability := "--capability=CAP_SYS_ADMIN,CAP_NET_ADMIN,CAP_MKNOD"
+	machineArg := "--machine=" + container
 	var netDev string
 
 	if network {
@@ -104,15 +106,15 @@ func Boot(c *conf.Config, container string, link string, ephemeral bool, network
 
 	if network {
 		if ephemeral {
-			err = system.ExecAndRenounce(nspawn, capability, "-xbD", container, netDev)
+			err = system.ExecAndRenounce(nspawn, capability, "-xbD", container, netDev, "--link-journal=try-guest", "U", "--settings=override", machineArg)
 		} else {
-			err = system.ExecAndRenounce(nspawn, capability, "-bD", container, netDev)
+			err = system.ExecAndRenounce(nspawn, capability, "-bD", container, netDev, "--link-journal=try-guest", "U", "--settings=override", machineArg)
 		}
 	} else {
 		if ephemeral {
-			err = system.ExecAndRenounce(nspawn, capability, "-xbD", container, netDev)
+			err = system.ExecAndRenounce(nspawn, capability, "-xbD", container, netDev, "--link-journal=try-guest", "U", "--settings=override", machineArg)
 		} else {
-			err = system.ExecAndRenounce(nspawn, capability, "-bD", container, netDev)
+			err = system.ExecAndRenounce(nspawn, capability, "-bD", container, netDev, "--link-journal=try-guest", "U", "--settings=override", machineArg)
 		}
 	}
 	if err != nil {
