@@ -12,6 +12,20 @@ import (
 	"strings"
 )
 
+const (
+	NetworkdService = "/etc/systemd/system/multi-user.target.wants/systemd-networkd.service"
+	NetworkdDBus    = "/etc/systemd/system/dbus-org.freedesktop.network1.service"
+	NetworkdOnline  = "/etc/systemd/system/network-online.target.wants/systemd-networkd-wait-online.service"
+	NetworkdSocket  = "/etc/systemd/system/sockets.target.wants/systemd-networkd.socket"
+)
+
+func DisableNetworkd(c string) {
+	os.Remove(path.Join(c, NetworkdService))
+	os.Remove(path.Join(c, NetworkdDBus))
+	os.Remove(path.Join(c, NetworkdOnline))
+	os.Remove(path.Join(c, NetworkdSocket))
+}
+
 func RecursesiveChmod(path string, mode os.FileMode) error {
 	err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -46,7 +60,6 @@ func RemoveDir(d string) {
 	os.RemoveAll(d)
 }
 
-
 func FilePathWalkDir(root string) (map[string]bool, error) {
 	files := make(map[string]bool)
 	err := filepath.Walk(root, func(f string, info os.FileInfo, err error) error {
@@ -58,7 +71,6 @@ func FilePathWalkDir(root string) (map[string]bool, error) {
 	})
 	return files, err
 }
-
 
 func ParseMachines(root string) (map[string]bool, error) {
 	files := make(map[string]bool)
