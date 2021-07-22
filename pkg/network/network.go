@@ -47,14 +47,12 @@ func SetupNetwork(n *Network, c *conf.Config) error {
 	EnsureIPv4Forward()
 
 	if c.Network.Kind == "macvlan" {
-		err := CreateMACVLan("photon", c.Network.ParentLink)
-		if err != nil {
+		if err := CreateMACVLan("photon", c.Network.ParentLink); err != nil {
 			log.Fatalf("Failed to create MACVlan='photon' on link='%s': %+v", err)
 			return err
 		}
 	} else {
-		err := CreateBridge("photon")
-		if err != nil {
+		if err := CreateBridge("photon"); err != nil {
 			log.Fatalf("Failed to create Bridge='photon': %+v", err)
 			return err
 		}
@@ -101,8 +99,7 @@ func EnsureIPv4Forward() error {
 		return nil
 	}
 
-	err = ioutil.WriteFile(ProcFSIpv4Forward, []byte("1"), 0)
-	if err != nil {
+	if err = ioutil.WriteFile(ProcFSIpv4Forward, []byte("1"), 0); err != nil {
 		log.Errorf("failed to write to '%s': %v", ProcFSIpv4Forward, err)
 		return err
 	}

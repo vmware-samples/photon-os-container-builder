@@ -11,7 +11,8 @@ import (
 )
 
 const (
-	nspawn = "/usr/bin/systemd-nspawn"
+	nspawn     = "/usr/bin/systemd-nspawn"
+	capability = "--capability=CAP_SYS_ADMIN,CAP_NET_ADMIN,CAP_MKNOD"
 )
 
 func determineNetworking(c *conf.Config, link string) (n string) {
@@ -38,8 +39,7 @@ func determineNetworking(c *conf.Config, link string) (n string) {
 
 func Spawn(c string, dir bool) (err error) {
 	if dir {
-		err = system.ExecAndRenounce(nspawn, "-D", c)
-		if err != nil {
+		if err = system.ExecAndRenounce(nspawn, "-D", c); err != nil {
 			fmt.Printf("Failed to execute systemd-nspawn: %+v\n", err)
 			return err
 		}
@@ -49,8 +49,6 @@ func Spawn(c string, dir bool) (err error) {
 }
 
 func ThunderBolt(c *conf.Config, container string, link string, ephemeral bool, machine bool, network bool) (err error) {
-	capability := "--capability=CAP_SYS_ADMIN,CAP_NET_ADMIN,CAP_MKNOD"
-	machineArg := "--machine=" + container
 	var netDev string
 
 	if network {
@@ -60,29 +58,29 @@ func ThunderBolt(c *conf.Config, container string, link string, ephemeral bool, 
 	if network {
 		if ephemeral {
 			if machine {
-				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, "-M", container, netDev, "--link-journal=try-guest", "U", "--settings=override", machineArg)
+				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, "-M", container, netDev)
 			} else {
-				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, netDev, "--link-journal=try-guest", "U", "--settings=override", machineArg)
+				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, netDev)
 			}
 		} else {
 			if machine {
-				err = system.ExecAndRenounce(nspawn, capability, "-D", container, "-M", container, netDev, "--link-journal=try-guest", "U", "--settings=override", machineArg)
+				err = system.ExecAndRenounce(nspawn, capability, "-D", container, "-M", container, netDev)
 			} else {
-				err = system.ExecAndRenounce(nspawn, capability, "-D", container, netDev, "--link-journal=try-guest", "U", "--settings=override", machineArg)
+				err = system.ExecAndRenounce(nspawn, capability, "-D", container, netDev)
 			}
 		}
 	} else {
 		if ephemeral {
 			if machine {
-				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, "-M", container, "--link-journal=try-guest", "U", "--settings=override", machineArg)
+				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, "-M", container)
 			} else {
 				err = system.ExecAndRenounce(nspawn, capability, "-xD", container)
 			}
 		} else {
 			if machine {
-				err = system.ExecAndRenounce(nspawn, capability, "-D", container, "-M", container, "--link-journal=try-guest", "U", "--settings=override", machineArg)
+				err = system.ExecAndRenounce(nspawn, capability, "-D", container, "-M", container)
 			} else {
-				err = system.ExecAndRenounce(nspawn, capability, "-D", container, "--link-journal=try-guest", "U", "--settings=override", machineArg)
+				err = system.ExecAndRenounce(nspawn, capability, "-D", container)
 			}
 		}
 
@@ -96,8 +94,6 @@ func ThunderBolt(c *conf.Config, container string, link string, ephemeral bool, 
 }
 
 func Boot(c *conf.Config, container string, link string, ephemeral bool, network bool) (err error) {
-	capability := "--capability=CAP_SYS_ADMIN,CAP_NET_ADMIN,CAP_MKNOD"
-	machineArg := "--machine=" + container
 	var netDev string
 
 	if network {
@@ -106,15 +102,15 @@ func Boot(c *conf.Config, container string, link string, ephemeral bool, network
 
 	if network {
 		if ephemeral {
-			err = system.ExecAndRenounce(nspawn, capability, "-xbD", container, netDev, "--link-journal=try-guest", "U", "--settings=override", machineArg)
+			err = system.ExecAndRenounce(nspawn, capability, "-xbD", container, netDev, "--link-journal=try-guest", "U", "--settings=override", "-M", container)
 		} else {
-			err = system.ExecAndRenounce(nspawn, capability, "-bD", container, netDev, "--link-journal=try-guest", "U", "--settings=override", machineArg)
+			err = system.ExecAndRenounce(nspawn, capability, "-bD", container, netDev, "--link-journal=try-guest", "U", "--settings=override", "-M", container)
 		}
 	} else {
 		if ephemeral {
-			err = system.ExecAndRenounce(nspawn, capability, "-xbD", container, netDev, "--link-journal=try-guest", "U", "--settings=override", machineArg)
+			err = system.ExecAndRenounce(nspawn, capability, "-xbD", container, netDev, "--link-journal=try-guest", "U", "--settings=override", "-M", container)
 		} else {
-			err = system.ExecAndRenounce(nspawn, capability, "-bD", container, netDev, "--link-journal=try-guest", "U", "--settings=override", machineArg)
+			err = system.ExecAndRenounce(nspawn, capability, "-bD", container, netDev, "--link-journal=try-guest", "U", "--settings=override", "-M", container)
 		}
 	}
 	if err != nil {
