@@ -24,7 +24,8 @@ func main() {
 	app := &cli.App{
 		Name:        "containerctl",
 		Version:     "v0.1",
-		Description: "Spawns Photon OS containers",
+		Description: "Compose and deploy photon OS containers",
+		Usage:       "Controls state of containers",
 		HideHelp:    false,
 		HideVersion: false,
 	}

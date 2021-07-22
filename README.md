@@ -31,7 +31,7 @@ root@test55 [ ~ ]#
 ```
 > > containerctl
 NAME:
-   containerctl - A new cli application
+   containerctl - Controls state of containers
 
 USAGE:
    containerctl [global options] command [command options] [arguments...]
@@ -40,12 +40,15 @@ VERSION:
    v0.1
 
 DESCRIPTION:
-   Spawns Photon OS containers
+   Compose and deploy photon OS containers
 
 COMMANDS:
    spawn, s      [NAME] Spawn a container
    boot, b       [NAME] Boot a container
    dir, d        [NAME] Directory to use as file system root for the container
+   start         [NAME] start container as a systemd service unit (use host networking)
+   stop          [NAME] stop container as a systemd service unit
+   restart       [NAME] restart container as a systemd service unit
 
 ```
 
