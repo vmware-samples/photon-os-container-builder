@@ -35,7 +35,7 @@ func Spawn(base string, c string, release string, packages string, dir bool) err
 		return err
 	}
 
-	if err := system.ExecAndDisplay(os.Stdout, "/usr/bin/systemd-machine-id-setup", "--root", c); err != nil {
+	if err := system.ExecAndDisplay(os.Stdout, "/usr/bin/systemd-machine-id-setup", "--root", d); err != nil {
 		fmt.Printf("Failed to execute systemd-machine-id-setup for '%s': %+v\n", c, err)
 		return err
 	}
