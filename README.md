@@ -3,7 +3,7 @@
 ***containerctl*** is CLI tool which spawns Photon OS in a light-weight container. It uses `systemd-nspawn` to jump start Photon OS containers. The primary
 use case for ***containerctl*** is to run Photon OS test cases in isolated environment.
 
-```
+```bash
 > sudo containerctl spawn test55
 
 Refreshing metadata for: 'VMware Photon Linux 4.0 (x86_64) Updates'
@@ -20,16 +20,44 @@ lz4                      x86_64       1.9.2-2.ph4      photon-updates 464.87k 47
 Complete!
 ```
 
-```
+```bash
 > sudo containerctl dir test55
 Spawning container test55 on /var/lib/machines/test55.
 Press ^] three times within 1s to kill container.
 root@test55 [ ~ ]#
+root@test55 [ ~ ]# passwd
+New password:
+Retype new password:
+passwd: password updated successfully
+root@test55 [ ~ ]# exit
+
 ```
 
+```bash
+> sudo containerctl boot test55
+Spawning container test55 on /var/lib/machines/test55.
+Press ^] three times within 1s to kill container.
+systemd v247.6-1.ph4 running in system mode. (+PAM -AUDIT +SELINUX +IMA -APPARMOR +SMACK +SYSVINIT +UTMP -LIBCRYPTSETUP +GCRYPT +GNUTLS +ACL +XZ +LZ4 +ZSTD +SECCOMP +BLKID +ELFUTILS +KMOD -IDN2 -IDN -PCRE2 default-hierarchy=hybrid)
+Detected virtualization systemd-nspawn.
+Detected architecture x86-64.
+
+Welcome to VMware Photon OS/Linux!
+
+[  OK  ] Finished Permit User Sessions.
+[  OK  ] Started Console Getty.
+[  OK  ] Reached target Login Prompts.
+[  OK  ] Started Network Service.
+[  OK  ] Reached target Multi-User System.
+         Starting Update UTMP about System Runlevel Changes...
+[  OK  ] Finished Update UTMP about System Runlevel Changes.
+
+Welcome to Photon 4.0 (x86_64) - Kernel 5.10.46-1.ph4-esx (console)
+test55 login:
 
 ```
-> > containerctl
+
+```bash
+> containerctl
 NAME:
    containerctl - Controls state of containers
 
@@ -53,7 +81,7 @@ COMMANDS:
 ```
 
 #### Build
-```
+```bash
 ❯  make build
 ❯  sudo make install
 ❯  sudo tdnf install systemd-container
