@@ -34,8 +34,8 @@ func Restart(c string) error {
 	return nil
 }
 
-func SetupContainerService(container string, ephemeral bool) error {
-	if err := system.CreateUnitFile(container, ephemeral); err != nil {
+func SetupContainerService(container string, machine string, ephemeral bool) error {
+	if err := system.CreateUnitFile(container, machine, ephemeral); err != nil {
 		return err
 	}
 

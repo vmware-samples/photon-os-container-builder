@@ -12,7 +12,7 @@ const (
 	defaultUnitFilePath = "/usr/lib/systemd/system"
 )
 
-func CreateUnitFile(container string, ephemeral bool) error {
+func CreateUnitFile(container string, machine string, ephemeral bool) error {
 	unit := path.Join(defaultUnitFilePath, container) + ".service"
 
 	file, err := os.Create(unit)
@@ -34,6 +34,10 @@ func CreateUnitFile(container string, ephemeral bool) error {
 	}
 
 	execStart := "ExecStart=/usr/bin/containerctl boot "
+	if machine != "" {
+		execStart += "-m " + machine + " "
+
+	}
 	if ephemeral {
 		execStart += "-x "
 	}

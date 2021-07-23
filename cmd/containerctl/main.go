@@ -51,7 +51,7 @@ func main() {
 				&cli.BoolFlag{
 					Name:    "ephemeral",
 					Aliases: []string{"x"},
-					Usage:   "Run with a temporary snapshot of its file system that is removed immediately when the container terminates",
+					Usage:   "create systemd service unit with ephemeral flag",
 				},
 				&cli.BoolFlag{
 					Name:    "dir",
@@ -63,6 +63,11 @@ func main() {
 					Aliases: []string{"n"},
 					Usage:   "Enable systemd-networkd inside container",
 				},
+				&cli.StringFlag{
+					Name:    "machine",
+					Aliases: []string{"m"},
+					Usage:   "Sets the machine name for this container",
+				},
 			},
 			Action: func(c *cli.Context) error {
 				if c.NArg() != 1 {
@@ -70,16 +75,17 @@ func main() {
 				}
 
 				release := c.String("release")
+				machine := c.String("machine")
 				dir := c.Bool("dir")
 				network := c.Bool("network")
 				ephemeral := c.Bool("ephemeral")
 
 				if c.String("packages") == "" {
-					if err := container.Spawn(conf.DefaultStorageDir, c.Args().First(), release, conf.DefaultPackages, dir, network, ephemeral); err != nil {
+					if err := container.Spawn(conf.DefaultStorageDir, c.Args().First(), release, conf.DefaultPackages, machine, dir, network, ephemeral); err != nil {
 						os.Exit(1)
 					}
 				} else {
-					if err := container.Spawn(conf.DefaultStorageDir, c.Args().First(), release, c.String("packages"), dir, network, ephemeral); err != nil {
+					if err := container.Spawn(conf.DefaultStorageDir, c.Args().First(), release, c.String("packages"), machine, dir, network, ephemeral); err != nil {
 						os.Exit(1)
 					}
 				}
@@ -107,6 +113,11 @@ func main() {
 					Aliases: []string{"l"},
 					Usage:   "Assign the specified network interface to the container",
 				},
+				&cli.StringFlag{
+					Name:    "machine",
+					Aliases: []string{"m"},
+					Usage:   "Sets the machine name for this container",
+				},
 			},
 
 			Action: func(c *cli.Context) error {
@@ -114,7 +125,10 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				if err := container.Boot(cfg, conf.DefaultStorageDir, c.Args().First(), c.String("link"), c.Bool("ephemeral"), c.Bool("network")); err != nil {
+				link := c.String("link")
+				machine := c.String("machine")
+
+				if err := container.Boot(cfg, conf.DefaultStorageDir, c.Args().First(), link, machine, c.Bool("ephemeral"), c.Bool("network")); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -130,7 +144,7 @@ func main() {
 					Aliases: []string{"x"},
 					Usage:   "Run with a temporary snapshot of its file system that is removed immediately when the container terminates",
 				},
-				&cli.BoolFlag{
+				&cli.StringFlag{
 					Name:    "machine",
 					Aliases: []string{"m"},
 					Usage:   "Sets the machine name for this container. This name may be used to identify this container during its runtime",
@@ -151,7 +165,7 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				if err := container.JumpStart(cfg, conf.DefaultStorageDir, c.Args().First(), c.String("link"), c.Bool("ephemeral"), c.Bool("machine"), c.Bool("network")); err != nil {
+				if err := container.JumpStart(cfg, conf.DefaultStorageDir, c.Args().First(), c.String("link"), c.String("machine"), c.Bool("ephemeral"), c.Bool("network")); err != nil {
 					fmt.Println(err)
 					os.Exit(1)
 				}

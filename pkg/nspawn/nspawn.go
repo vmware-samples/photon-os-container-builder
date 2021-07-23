@@ -48,7 +48,7 @@ func Spawn(c string, dir bool) (err error) {
 	return nil
 }
 
-func ThunderBolt(c *conf.Config, container string, link string, ephemeral bool, machine bool, network bool) (err error) {
+func ThunderBolt(c *conf.Config, container string, link string, machine string, ephemeral bool, network bool) (err error) {
 	var netDev string
 
 	if network {
@@ -57,28 +57,28 @@ func ThunderBolt(c *conf.Config, container string, link string, ephemeral bool, 
 
 	if network {
 		if ephemeral {
-			if machine {
-				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, "-M", container, netDev)
+			if machine != "" {
+				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, "-M", machine, netDev)
 			} else {
 				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, netDev)
 			}
 		} else {
-			if machine {
-				err = system.ExecAndRenounce(nspawn, capability, "-D", container, "-M", container, netDev)
+			if machine != "" {
+				err = system.ExecAndRenounce(nspawn, capability, "-D", container, "-M", machine, netDev)
 			} else {
 				err = system.ExecAndRenounce(nspawn, capability, "-D", container, netDev)
 			}
 		}
 	} else {
 		if ephemeral {
-			if machine {
-				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, "-M", container)
+			if machine != "" {
+				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, "-M", machine)
 			} else {
 				err = system.ExecAndRenounce(nspawn, capability, "-xD", container)
 			}
 		} else {
-			if machine {
-				err = system.ExecAndRenounce(nspawn, capability, "-D", container, "-M", container)
+			if machine != "" {
+				err = system.ExecAndRenounce(nspawn, capability, "-D", container, "-M", machine)
 			} else {
 				err = system.ExecAndRenounce(nspawn, capability, "-D", container)
 			}
@@ -93,7 +93,7 @@ func ThunderBolt(c *conf.Config, container string, link string, ephemeral bool, 
 	return nil
 }
 
-func Boot(c *conf.Config, container string, link string, ephemeral bool, network bool) (err error) {
+func Boot(c *conf.Config, container string, link string, machine string, ephemeral bool, network bool) (err error) {
 	var netDev string
 
 	if network {
@@ -102,15 +102,15 @@ func Boot(c *conf.Config, container string, link string, ephemeral bool, network
 
 	if network {
 		if ephemeral {
-			err = system.ExecAndRenounce(nspawn, capability, "-xbD", container, netDev, "--link-journal=try-guest", "U", "--settings=override", "-M", container)
+			err = system.ExecAndRenounce(nspawn, capability, "-xbD", container, netDev, "--link-journal=try-guest", "-M", machine)
 		} else {
-			err = system.ExecAndRenounce(nspawn, capability, "-bD", container, netDev, "--link-journal=try-guest", "U", "--settings=override", "-M", container)
+			err = system.ExecAndRenounce(nspawn, capability, "-bD", container, netDev, "--link-journal=try-guest", "-M", machine)
 		}
 	} else {
 		if ephemeral {
-			err = system.ExecAndRenounce(nspawn, capability, "-xbD", container, "-M", container)
+			err = system.ExecAndRenounce(nspawn, capability, "-xbD", container, "-M", machine)
 		} else {
-			err = system.ExecAndRenounce(nspawn, capability, "-bD", container, netDev, "--link-journal=try-guest", "U", "--settings=override", "-M", container)
+			err = system.ExecAndRenounce(nspawn, capability, "-bD", container, netDev, "--link-journal=try-guest",  "-M", machine)
 		}
 	}
 	if err != nil {
