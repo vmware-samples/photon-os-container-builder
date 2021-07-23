@@ -81,6 +81,7 @@ COMMANDS:
 ```
 
 #### Build
+
 ```bash
 ❯  make build
 ❯  sudo make install

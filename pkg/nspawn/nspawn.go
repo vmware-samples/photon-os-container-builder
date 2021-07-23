@@ -108,7 +108,7 @@ func Boot(c *conf.Config, container string, link string, ephemeral bool, network
 		}
 	} else {
 		if ephemeral {
-			err = system.ExecAndRenounce(nspawn, capability, "-xbD", container, netDev, "--link-journal=try-guest", "U", "--settings=override", "-M", container)
+			err = system.ExecAndRenounce(nspawn, capability, "-xbD", container, "-M", container)
 		} else {
 			err = system.ExecAndRenounce(nspawn, capability, "-bD", container, netDev, "--link-journal=try-guest", "U", "--settings=override", "-M", container)
 		}

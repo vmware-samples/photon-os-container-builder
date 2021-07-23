@@ -17,7 +17,7 @@ import (
 	"github.com/photon-os-container-builder/pkg/systemd"
 )
 
-func Spawn(base string, c string, release string, packages string, dir bool) error {
+func Spawn(base string, c string, release string, packages string, dir bool, network bool, ephemeral bool) error {
 	d := path.Join(base, c)
 
 	if err := system.CreateDirectory(base, c); err != nil {
@@ -40,9 +40,11 @@ func Spawn(base string, c string, release string, packages string, dir bool) err
 		return err
 	}
 
-	system.DisableNetworkd(d)
+	if (!network) {
+		system.DisableNetworkd(d)
+	}
 
-	if err := systemd.SetupContainerService(c); err != nil {
+	if err := systemd.SetupContainerService(c, ephemeral); err != nil {
 		fmt.Printf("Failed to create unit file for '%s': %+v\n", c, err)
 		return err
 	}
