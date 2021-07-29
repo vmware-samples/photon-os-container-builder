@@ -34,8 +34,12 @@ func Restart(c string) error {
 	return nil
 }
 
-func SetupContainerService(container string, machine string, ephemeral bool) error {
-	if err := system.CreateUnitFile(container, machine, ephemeral); err != nil {
+func SetupContainerService(container string, network string, link string, machine string, ephemeral bool) error {
+	if err := system.CreateUnitFile(container, network, link, machine, ephemeral); err != nil {
+		return err
+	}
+
+	if err := system.CreateNetworkdUnitFile(container, network, link); err != nil {
 		return err
 	}
 

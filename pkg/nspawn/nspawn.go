@@ -4,6 +4,7 @@
 package nspawn
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/photon-os-container-builder/pkg/conf"
@@ -15,26 +16,18 @@ const (
 	capability = "--capability=CAP_SYS_ADMIN,CAP_NET_ADMIN,CAP_MKNOD"
 )
 
-func determineNetworking(c *conf.Config, link string) (n string) {
+func determineNetworking(network string, link string) (string, error) {
 	var netDev string
 
-	if c.Network.Kind == "macvlan" {
-		netDev = "--network-macvlan=photon"
-	} else if c.Network.Kind == "bridge" {
-		netDev = "--network-bridge=photon"
+	if network == "macvlan" {
+		netDev = "--network-macvlan=" + link
+	} else if network == "ipvlan" {
+		netDev = "--network-ipvlan=" + link
 	} else {
-		if c.Network.Link == "" {
-			netDev = "--network-interface=eth1"
-		} else {
-			if link == "" {
-				netDev = "--network-interface=" + c.Network.Link
-			} else {
-				netDev = "--network-interface=" + link
-			}
-		}
+		return "", errors.New("unsupported networking")
 	}
 
-	return netDev
+	return netDev, nil
 }
 
 func Spawn(c string, dir bool) (err error) {
@@ -48,14 +41,17 @@ func Spawn(c string, dir bool) (err error) {
 	return nil
 }
 
-func ThunderBolt(c *conf.Config, container string, link string, machine string, ephemeral bool, network bool) (err error) {
+func ThunderBolt(c *conf.Config, container string, network string, link string, machine string, ephemeral bool) (err error) {
 	var netDev string
 
-	if network {
-		netDev = determineNetworking(c, link)
+	if network != "" {
+		netDev, err = determineNetworking(network, link)
+		if err != nil {
+			return err
+		}
 	}
 
-	if network {
+	if network != "" {
 		if ephemeral {
 			if machine != "" {
 				err = system.ExecAndRenounce(nspawn, capability, "-xD", container, "-M", machine, netDev)
@@ -93,14 +89,18 @@ func ThunderBolt(c *conf.Config, container string, link string, machine string, 
 	return nil
 }
 
-func Boot(c *conf.Config, container string, link string, machine string, ephemeral bool, network bool) (err error) {
+func Boot(c *conf.Config, container string, network string, link string, machine string, ephemeral bool) (err error) {
 	var netDev string
 
-	if network {
-		netDev = determineNetworking(c, link)
+	if network != "" {
+		netDev, err = determineNetworking(network, link)
+		if err != nil {
+			return err
+		}
 	}
 
-	if network {
+	fmt.Println(network, link, machine)
+	if network != "" {
 		if ephemeral {
 			err = system.ExecAndRenounce(nspawn, capability, "-xbD", container, netDev, "--link-journal=try-guest", "-M", machine)
 		} else {
@@ -110,11 +110,13 @@ func Boot(c *conf.Config, container string, link string, machine string, ephemer
 		if ephemeral {
 			err = system.ExecAndRenounce(nspawn, capability, "-xbD", container, "-M", machine)
 		} else {
-			err = system.ExecAndRenounce(nspawn, capability, "-bD", container, netDev, "--link-journal=try-guest",  "-M", machine)
+			err = system.ExecAndRenounce(nspawn, capability, "-bD", container, "--link-journal=try-guest", "-M", machine)
 		}
 	}
+
 	if err != nil {
 		fmt.Printf("Failed to boot container '%s': %+v\n", container, err)
+		return err
 	}
 
 	return nil

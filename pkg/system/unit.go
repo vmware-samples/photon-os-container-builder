@@ -9,10 +9,12 @@ import (
 )
 
 const (
-	defaultUnitFilePath = "/usr/lib/systemd/system"
+	defaultStorageDir           = "/var/lib/machines"
+	defaultUnitFilePath         = "/lib/systemd/system"
+	defaultNetworkdUnitFilePath = "/lib/systemd/network"
 )
 
-func CreateUnitFile(container string, machine string, ephemeral bool) error {
+func CreateUnitFile(container string, network string, link string, machine string, ephemeral bool) error {
 	unit := path.Join(defaultUnitFilePath, container) + ".service"
 
 	file, err := os.Create(unit)
@@ -36,10 +38,15 @@ func CreateUnitFile(container string, machine string, ephemeral bool) error {
 	execStart := "ExecStart=/usr/bin/containerctl boot "
 	if machine != "" {
 		execStart += "-m " + machine + " "
-
 	}
 	if ephemeral {
 		execStart += "-x "
+	}
+	if network != "" {
+		execStart += "-n " + network + " "
+	}
+	if link != "" {
+		execStart += "-l " + link + " "
 	}
 
 	line = "[Service]\n" +
@@ -84,6 +91,39 @@ func RemoveUnitFile(container string) error {
 	unit := path.Join(defaultUnitFilePath, container) + ".service"
 
 	if err := os.Remove(unit); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func CreateNetworkdUnitFile(container string, network string, link string) error {
+	unit := "10-" + container + ".network"
+	unit = path.Join(defaultNetworkdUnitFilePath, unit)
+	unit = path.Join(container, unit)
+	unit = path.Join(defaultStorageDir, unit)
+
+	file, err := os.Create(unit)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	line := "[Match]\nName="
+
+	if network == "ipvlan" {
+		line += "iv*\n\n[Network]\nDHCP=ipv4\n\n"
+		line += "[DHCPv4]\nRequestBroadcast=yes\n"
+	} else {
+		line += "mv*\n\n[Network]\nDHCP=ipv4\n\n"
+	}
+
+	_, err = file.WriteString(line)
+	if err != nil {
+		return err
+	}
+
+	if err := os.Chmod(unit, 0644); err != nil {
 		return err
 	}
 

@@ -58,10 +58,15 @@ func main() {
 					Aliases: []string{"d"},
 					Usage:   "Once installation is finished, chroot into the container",
 				},
-				&cli.BoolFlag{
+				&cli.StringFlag{
 					Name:    "network",
 					Aliases: []string{"n"},
-					Usage:   "Enable systemd-networkd inside container",
+					Usage:   "Enable kind of network (macvlan, ipvlan) and also enable systemd-networkd inside container",
+				},
+				&cli.StringFlag{
+					Name:    "link",
+					Aliases: []string{"l"},
+					Usage:   "Specifies the parent physical interface that is to be associated with a MACVLAN/IPVLAN to container",
 				},
 				&cli.StringFlag{
 					Name:    "machine",
@@ -76,16 +81,26 @@ func main() {
 
 				release := c.String("release")
 				machine := c.String("machine")
+				network := c.String("network")
+				link := c.String("link")
+
 				dir := c.Bool("dir")
-				network := c.Bool("network")
 				ephemeral := c.Bool("ephemeral")
 
+				if network != "" && link == "" {
+					fmt.Printf("network='%s' is specified but link is missing", network)
+					os.Exit(1)
+				} else if link != "" && network == "" {
+					fmt.Printf("link='%s' is specified but network is missing", link)
+					os.Exit(1)
+				}
+
 				if c.String("packages") == "" {
-					if err := container.Spawn(conf.DefaultStorageDir, c.Args().First(), release, conf.DefaultPackages, machine, dir, network, ephemeral); err != nil {
+					if err := container.Spawn(conf.DefaultStorageDir, c.Args().First(), release, conf.DefaultPackages, network, link, machine, dir, ephemeral); err != nil {
 						os.Exit(1)
 					}
 				} else {
-					if err := container.Spawn(conf.DefaultStorageDir, c.Args().First(), release, c.String("packages"), machine, dir, network, ephemeral); err != nil {
+					if err := container.Spawn(conf.DefaultStorageDir, c.Args().First(), release, c.String("packages"), network, link, machine, dir, ephemeral); err != nil {
 						os.Exit(1)
 					}
 				}
@@ -103,15 +118,15 @@ func main() {
 					Aliases: []string{"x"},
 					Usage:   "Run with a temporary snapshot of its file system that is removed immediately when the container terminates",
 				},
-				&cli.BoolFlag{
+				&cli.StringFlag{
 					Name:    "network",
 					Aliases: []string{"n"},
-					Usage:   "Disconnect networking of the container from the host (private network)",
+					Usage:   "Enable kind of network (MACVLAN/IPVLAN ) and also enable systemd-networkd inside container",
 				},
 				&cli.StringFlag{
 					Name:    "link",
 					Aliases: []string{"l"},
-					Usage:   "Assign the specified network interface to the container",
+					Usage:   "Specifies the parent physical interface that is to be associated with a MACVLAN/IPVLAN to container",
 				},
 				&cli.StringFlag{
 					Name:    "machine",
@@ -125,10 +140,19 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
+				network := c.String("network")
 				link := c.String("link")
 				machine := c.String("machine")
 
-				if err := container.Boot(cfg, conf.DefaultStorageDir, c.Args().First(), link, machine, c.Bool("ephemeral"), c.Bool("network")); err != nil {
+				if network != "" && link == "" {
+					fmt.Printf("network='%s' is specified but link is missing", network)
+					os.Exit(1)
+				} else if link != "" && network == "" {
+					fmt.Printf("link='%s' is specified but network is missing", link)
+					os.Exit(1)
+				}
+
+				if err := container.Boot(cfg, conf.DefaultStorageDir, c.Args().First(), network, link, machine, c.Bool("ephemeral")); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -149,15 +173,15 @@ func main() {
 					Aliases: []string{"m"},
 					Usage:   "Sets the machine name for this container. This name may be used to identify this container during its runtime",
 				},
-				&cli.BoolFlag{
+				&cli.StringFlag{
 					Name:    "network",
 					Aliases: []string{"n"},
-					Usage:   "Disconnect networking of the container from the host (private network)",
+					Usage:   "Enable kind of network (MACVLAN/IPVLAN ) and also enable systemd-networkd inside container",
 				},
 				&cli.StringFlag{
 					Name:    "link",
 					Aliases: []string{"l"},
-					Usage:   "Assign the specified network interface to the container",
+					Usage:   "Specifies the parent physical interface that is to be associated with a MACVLAN/IPVLAN to container",
 				},
 			},
 			Action: func(c *cli.Context) error {
@@ -165,7 +189,19 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				if err := container.JumpStart(cfg, conf.DefaultStorageDir, c.Args().First(), c.String("link"), c.String("machine"), c.Bool("ephemeral"), c.Bool("network")); err != nil {
+				network := c.String("network")
+				link := c.String("link")
+				machine := c.String("machine")
+
+				if network != "" && link == "" {
+					fmt.Printf("network='%s' is specified but link is missing", network)
+					os.Exit(1)
+				} else if link != "" && network == "" {
+					fmt.Printf("link='%s' is specified but network is missing", link)
+					os.Exit(1)
+				}
+
+				if err := container.JumpStart(cfg, conf.DefaultStorageDir, c.Args().First(), network, link, machine, c.Bool("ephemeral")); err != nil {
 					fmt.Println(err)
 					os.Exit(1)
 				}

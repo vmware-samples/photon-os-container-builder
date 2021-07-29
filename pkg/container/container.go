@@ -17,7 +17,7 @@ import (
 	"github.com/photon-os-container-builder/pkg/systemd"
 )
 
-func Spawn(base string, c string, release string, packages string, machine string, dir bool, network bool, ephemeral bool) error {
+func Spawn(base string, c string, release string, packages string, network string, link string, machine string, dir bool, ephemeral bool) error {
 	d := path.Join(base, c)
 
 	if err := system.CreateDirectory(base, c); err != nil {
@@ -40,11 +40,12 @@ func Spawn(base string, c string, release string, packages string, machine strin
 		return err
 	}
 
-	if !network {
+	// Host networking
+	if network == ""{
 		system.DisableNetworkd(d)
 	}
 
-	if err := systemd.SetupContainerService(c, machine, ephemeral); err != nil {
+	if err := systemd.SetupContainerService(c, network, link, machine, ephemeral); err != nil {
 		fmt.Printf("Failed to create unit file for '%s': %+v\n", c, err)
 		return err
 	}
@@ -52,7 +53,7 @@ func Spawn(base string, c string, release string, packages string, machine strin
 	return nspawn.Spawn(d, dir)
 }
 
-func JumpStart(c *conf.Config, base string, container string, link string, machine string, ephemeral bool, network bool) error {
+func JumpStart(c *conf.Config, base string, container string, network string, link string, machine string, ephemeral bool) error {
 	dir := path.Join(base, container)
 
 	if !system.PathExists(dir) {
@@ -60,10 +61,10 @@ func JumpStart(c *conf.Config, base string, container string, link string, machi
 		return errors.New("not exist")
 	}
 
-	return nspawn.ThunderBolt(c, dir, link, machine, ephemeral, network)
+	return nspawn.ThunderBolt(c, dir, network, link, machine, ephemeral)
 }
 
-func Boot(c *conf.Config, storage string, container string, link string, machine string, ephemeral bool, network bool) error {
+func Boot(c *conf.Config, storage string, container string, network string, link string, machine string, ephemeral bool) error {
 	dir := path.Join(storage, container)
 
 	if !system.PathExists(dir) {
@@ -71,5 +72,6 @@ func Boot(c *conf.Config, storage string, container string, link string, machine
 		return errors.New("not exist")
 	}
 
-	return nspawn.Boot(c, dir, link, machine, ephemeral, network)
+	fmt.Println(network, link, machine)
+	return nspawn.Boot(c, dir, network, link, machine, ephemeral)
 }
