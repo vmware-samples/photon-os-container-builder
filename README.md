@@ -88,6 +88,31 @@ COMMANDS:
 ❯  sudo tdnf install systemd-container
 ```
 
+containerctl spawn [command options] [arguments...]
+
+OPTIONS:
+
+   `--packages value, -p`
+      If specified, the list of packages will be used to compose the container.
+
+   `--release value, -r`
+      If specified, the Photon OS release version will be used. Defaults to 4.0.
+
+   `--ephemeral, -x`
+      If specified, a systemd service unit will be created with ephemeral flag.
+
+   `--dir, -d`
+      If specified, Once installation is finished, chroot into the container,
+
+   `--network value, -n`
+       If specified, enables kind of network (macvlan, ipvlan) and also enable systemd-networkd inside container
+
+   `--link value, -l`
+      If specified, the parent physical interface that is to be associated with a MACVLAN/IPVLAN to container. This
+      should be used with combination of `--network` option.
+   `--machine value, -m`
+       If specified, sets the machine name for this container during runtime.
+
 
 #### Contributing
 ----
