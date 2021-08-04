@@ -1,7 +1,9 @@
 ### photon-os-container-builder
 ----
-***containerctl*** is CLI tool which spawns Photon OS in a light-weight container. It uses `systemd-nspawn` to jump start Photon OS containers. The primary
-use case for ***containerctl*** is to run Photon OS test cases in isolated environment.
+***containerctl*** is CLI tool which spawns Photon OS in a light-weight container. It uses `systemd-nspawn` to start Photon OS containers. The primary
+use case for ***containerctl*** is to run Photon OS test cases in a isolated environment. 
+
+Photon OS package manager ***tdnf*** integrated with ***containerctl***. Hence it allows to prepare a root fs consisting packages depending on the user choice. It automatically prepares the root fs and boots into the container quickly. VMDK images can be automatically deployed via ***containerctl*** and tested.
 
 ```bash
 > sudo containerctl spawn test55
@@ -110,6 +112,7 @@ OPTIONS:
    `--link value, -l`
       If specified, the parent physical interface that is to be associated with a MACVLAN/IPVLAN to container. This
       should be used with combination of `--network` option.
+      
    `--machine value, -m`
        If specified, sets the machine name for this container during runtime.
 
