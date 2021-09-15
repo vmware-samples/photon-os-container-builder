@@ -13,7 +13,7 @@ import (
 
 const (
 	nspawn     = "/usr/bin/systemd-nspawn"
-	capability = "--capability=CAP_SYS_ADMIN,CAP_NET_ADMIN,CAP_MKNOD"
+	capability = "--capability=all"
 )
 
 func determineNetworking(network string, link string) (string, error) {
