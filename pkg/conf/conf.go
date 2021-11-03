@@ -4,9 +4,10 @@
 package conf
 
 import (
+	"github.com/spf13/viper"
+
 	"github.com/photon-os-container-builder/pkg/log"
 	"github.com/photon-os-container-builder/pkg/parser"
-	"github.com/spf13/viper"
 )
 
 const (
@@ -15,7 +16,10 @@ const (
 	DefaultStorageDir     = "/var/lib/machines"
 	DefaultUnitFilePath   = "/etc/systemd/system"
 	DefaultGPGDir         = "/etc/pki/rpm-gpg"
-	DefaultPackages       = "systemd,dbus,iproute2,tdnf,photon-release,photon-repos,curl,shadow,ncurses-terminfoiputils,glibc,zlib,filesystem,pkg-config,bash,bzip2,procps-ng,iana-etc,coreutils,bc,libtool,net-tools,findutils,xz,util-linux,kmod,linux-esx,ca-certificates,iptables,Linux-PAM,file,e2fsprogs,rpm,openssh,gdbm,python3,python3-libs,python3-xml,sed,grep,cpio,gzip,vim,open-vm-tools,docker,bridge-utils,cloud-init,krb5,which,tzdata,initramfs"
+	DefaultPackages       = "systemd,dbus,iproute2,tdnf,photon-release,photon-repos,curl,shadow,ncurses-terminfo,iputils,glibc,zlib,filesystem,pkg-config,bash,bzip2," +
+	                        "procps-ng,iana-etc,coreutils,bc,libtool,net-tools,findutils,xz,util-linux,kmod,linux-esx,ca-certificates,iptables,Linux-PAM,file,e2fsprogs," +
+				"rpm,openssh,gdbm,python3,python3-libs,python3-xml,sed,grep,cpio,gzip,vim,open-vm-tools,docker,bridge-utils,cloud-init,krb5,which,tzdata," +
+				"initramfs"
 
 	DefaultParentLink  = "eth0"
 	DefaultNetworkKind = "link"
