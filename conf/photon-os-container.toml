@@ -3,9 +3,3 @@
 #Packages="systemd,dbus,iproute2,tdnf,photon-release,photon-repos,curl,shadow,ncurses-terminfo,iputils"
 #Release="4.0"
 
-[Network]
-#Kind = "link"
-#Link = "eth1"
-#ParentLink="eth0"
-#AddressPool="192.168.1.1/24"
-#PoolOffset=64

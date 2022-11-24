@@ -27,13 +27,11 @@ $(BUILDDIR)/%/:
 .PHONY: build
 build:
 	- mkdir -p bin
-	go build -ldflags="-X 'main.buildVersion=${VERSION}' -X 'main.buildDate=${BUILD_DATE}'" -o bin/photon-os-containerd ./cmd/photon-os-containerd
 	go build -ldflags="-X 'main.buildVersion=${VERSION}' -X 'main.buildDate=${BUILD_DATE}'" -o bin/containerctl ./cmd/containerctl
 
 .PHONY: install
 install:
 	install bin/containerctl /usr/bin/
-	install bin/photon-os-containerd /usr/bin/
 
 	install -vdm 755 /etc/photon-os-container
 	install -m 755 conf/photon-os-container.toml /etc/photon-os-container
