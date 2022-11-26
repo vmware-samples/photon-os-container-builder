@@ -40,7 +40,7 @@ func Parse() (*Config, error) {
 	viper.AddConfigPath(ConfPath)
 
 	if err := viper.ReadInConfig(); err != nil {
-		fmt.Errorf("%+v", err)
+		fmt.Errorf("Failed to read configuration: %+v", err)
 	}
 
 	viper.SetDefault("System.Release", DefaultReleaseVersion)
