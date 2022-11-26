@@ -7,10 +7,11 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/urfave/cli/v2"
+
 	"github.com/photon-os-container-builder/pkg/conf"
 	"github.com/photon-os-container-builder/pkg/container"
 	"github.com/photon-os-container-builder/pkg/systemd"
-	"github.com/urfave/cli/v2"
 )
 
 func main() {
@@ -21,7 +22,7 @@ func main() {
 	cfg, _ := conf.Parse()
 
 	app := &cli.App{
-		Name:        "containerctl",
+		Name:        "cntrctl",
 		Version:     "v0.1",
 		Description: "Compose and deploy photon OS containers",
 		Usage:       "Controls state of containers",
