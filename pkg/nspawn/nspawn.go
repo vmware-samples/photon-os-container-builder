@@ -99,7 +99,6 @@ func Boot(c *conf.Config, container string, network string, link string, machine
 		}
 	}
 
-	fmt.Println(network, link, machine)
 	if network != "" {
 		if ephemeral {
 			err = system.ExecAndRenounce(nspawn, capability, "-xbD", container, netDev, "--link-journal=try-guest", "-M", machine)
