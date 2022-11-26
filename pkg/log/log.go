@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-2
-// Copyright 2021 VMware, Inc.
+// Copyright 2022 VMware, Inc.
 
 package log
 
