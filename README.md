@@ -1,12 +1,12 @@
 ### photon-os-container-builder
 ----
-***containerctl*** is CLI tool which spawns Photon OS in a light-weight container. It uses `systemd-nspawn` to start Photon OS containers. The primary
-use case for ***containerctl*** is to run Photon OS test cases in a isolated environment. 
+***cntrctl*** is CLI tool which spawns Photon OS in a light-weight container. It uses `systemd-nspawn` to start Photon OS containers. The primary
+use case for ***cntrctl*** is to run Photon OS test cases in a isolated environment.
 
-Photon OS package manager ***tdnf*** integrated with ***containerctl***. Hence it allows to prepare a root fs consisting packages depending on the user choice. It automatically prepares the root fs and boots into the container quickly. VMDK images can be automatically deployed via ***containerctl*** and tested.
+Photon OS package manager ***tdnf*** integrated with ***cntrctl***. Hence it allows to prepare a root fs consisting packages depending on the user choice. It automatically prepares the root fs and boots into the container quickly. VMDK images can be automatically deployed via ***cntrctl*** and tested.
 
 ```bash
-> sudo containerctl spawn test55
+> sudo cntrctl spawn test55
 
 Refreshing metadata for: 'VMware Photon Linux 4.0 (x86_64) Updates'
 Refreshing metadata for: 'VMware Photon Linux 4.0 (x86_64)'
@@ -23,7 +23,7 @@ Complete!
 ```
 
 ```bash
-> sudo containerctl dir test55
+> sudo cntrctl dir test55
 Spawning container test55 on /var/lib/machines/test55.
 Press ^] three times within 1s to kill container.
 root@test55 [ ~ ]#
@@ -36,7 +36,7 @@ root@test55 [ ~ ]# exit
 ```
 
 ```bash
-> sudo containerctl boot test55
+> sudo cntrctl boot test55
 Spawning container test55 on /var/lib/machines/test55.
 Press ^] three times within 1s to kill container.
 systemd v247.6-1.ph4 running in system mode. (+PAM -AUDIT +SELINUX +IMA -APPARMOR +SMACK +SYSVINIT +UTMP -LIBCRYPTSETUP +GCRYPT +GNUTLS +ACL +XZ +LZ4 +ZSTD +SECCOMP +BLKID +ELFUTILS +KMOD -IDN2 -IDN -PCRE2 default-hierarchy=hybrid)
@@ -59,12 +59,12 @@ test55 login:
 ```
 
 ```bash
-> containerctl
+> cntrctl
 NAME:
-   containerctl - Controls state of containers
+   cntrctl - Controls state of containers
 
 USAGE:
-   containerctl [global options] command [command options] [arguments...]
+   cntrctl [global options] command [command options] [arguments...]
 
 VERSION:
    v0.1
@@ -90,7 +90,7 @@ COMMANDS:
 ❯  sudo tdnf install systemd-container
 ```
 
-containerctl spawn [command options] [arguments...]
+cntrctl spawn [command options] [arguments...]
 
 OPTIONS:
 
@@ -112,7 +112,7 @@ OPTIONS:
    `--link value, -l`
       If specified, the parent physical interface that is to be associated with a MACVLAN/IPVLAN to container. This
       should be used with combination of `--network` option.
-      
+
    `--machine value, -m`
        If specified, sets the machine name for this container during runtime.
 
