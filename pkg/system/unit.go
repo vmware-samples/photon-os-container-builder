@@ -55,7 +55,6 @@ func CreateUnitFile(container string, network string, link string, machine strin
 	m.SetKeySectionString("Service", "DeviceAllow", "/dev/mapper/control rw")
 
 	m.SetKeySectionString("Install", "WantedBy", "machines.target")
-
 	return m.Save()
 }
 

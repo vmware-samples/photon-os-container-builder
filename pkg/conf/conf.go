@@ -27,9 +27,7 @@ const (
 
 type System struct {
 	Packages string `mapstructure:"Packages"`
-
 	Release  string `mapstructure:"Release"`
-	LogLevel string `mapstructure:"LogLevel"`
 }
 type Config struct {
 	System System `mapstructure:"System"`
