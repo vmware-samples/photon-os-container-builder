@@ -72,6 +72,5 @@ func Boot(c *conf.Config, storage string, container string, network string, link
 		return errors.New("not exist")
 	}
 
-	fmt.Println(network, link, machine)
 	return nspawn.Boot(c, dir, network, link, machine, ephemeral)
 }

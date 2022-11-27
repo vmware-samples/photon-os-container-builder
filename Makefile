@@ -37,8 +37,6 @@ install:
 
 	install -vdm 755 /etc/photon-os-container
 	install -m 755 distribution/photon-os-container.toml /etc/photon-os-container
-
-	install -m 0644 distribution/photon-os-container.service /lib/systemd/system/
 	systemctl daemon-reload
 
 PHONY: clean
