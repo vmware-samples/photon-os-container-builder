@@ -62,26 +62,37 @@ photon4 login:
 ❯ sudo cntrctl start photon4
 ❯ sudo systemctl status photon4
 ● photon4.service - Photon OS container photon4
-     Loaded: loaded (8;;file://zeus/usr/lib/systemd/system/photon4.service^G/usr/lib/systemd/system/photon4.service8;;^G; disabled; preset: enabled)
-     Active: active (running) since Sun 2022-11-27 03:49:35 UTC; 22s ago
-       Docs: 8;;man:containerctl(1)^Gman:containerctl(1)8;;^G
-   Main PID: 191204 (systemd-nspawn)
-     Status: "Container running: Startup finished in 2.423s."
+   ● photon4.service - Photon OS container
+     Loaded: loaded (8;;file://zeus/usr/lib/systemd/system/photon4.12.service^G/usr/lib/systemd/system/photon4.12.service8;;^G; disabled; preset: enabled)
+     Active: active (running) since Sun 2022-11-27 13:16:28 UTC; 16s ago
+       Docs: 8;;man:cntrctl(1)^Gman:cntrctl(1)8;;^G
+   Main PID: 194027 (systemd-nspawn)
+     Status: "Container running: Startup finished in 4.458s."
       Tasks: 1 (limit: 16384)
      Memory: 1.1M
-     CGroup: /machine.slice/photon4.service
-             └─191204 /usr/bin/systemd-nspawn --capability=all -bD /var/lib/machines/photon4 --link-journal=try-guest -M
+     CGroup: /machine.slice/photon4.12.service
+             └─194027 /usr/bin/systemd-nspawn --capability=all -bD /var/lib/machines/photon4.12 --link-journal=try-guest -M
 
-Nov 27 03:49:37 zeus containerctl[191204]: [  OK  ] Stopped OpenSSH Daemon.
-Nov 27 03:49:37 zeus containerctl[191204]: [  OK  ] Started OpenSSH Daemon.
-Nov 27 03:49:37 zeus containerctl[191204]: [  OK  ] Stopped OpenSSH Daemon.
-Nov 27 03:49:37 zeus containerctl[191204]: [  OK  ] Started OpenSSH Daemon.
-Nov 27 03:49:37 zeus containerctl[191204]: [  OK  ] Finished Execute cloud user/final scripts.
-Nov 27 03:49:37 zeus containerctl[191204]: [  OK  ] Reached target Cloud-init target.
-Nov 27 03:49:37 zeus containerctl[191204]: [  OK  ] Stopped OpenSSH Daemon.
-Nov 27 03:49:37 zeus containerctl[191204]: [  OK  ] Started OpenSSH Daemon.
-Nov 27 03:49:38 zeus containerctl[191204]:
-Nov 27 03:49:38 zeus containerctl[191204]: Welcome to Photon 4.0 (x86_64) - Kernel 5.10.142-2.ph4 (console)
+Nov 27 13:16:32 zeus cntrctl[194027]: ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBBOql3dIN0eJ/4NLKSaOV7aPc9luOtpDcRWs5xs9+13vS8qVR6XIBshv3TwmUu+8NP+>
+Nov 27 13:16:32 zeus cntrctl[194027]: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOq6/QRG07DMxIzy/7/gTB0hsdJfNP5FVZyvyO5agJyq root@photon4
+Nov 27 13:16:32 zeus cntrctl[194027]: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDSE0byx3ZW75bAdhKNUohEBppQuxjWzQSoFTvZ9K6tfnoyV+qsFgh3nViT+XJWoE6fONNpdWRolNWYiyhRiu1JIsITQZTVbIM5kXN>
+Nov 27 13:16:32 zeus cntrctl[194027]: -----END SSH HOST KEY KEYS-----
+Nov 27 13:16:32 zeus cntrctl[194027]: [  OK  ] Finished Execute cloud user/final scripts.
+Nov 27 13:16:32 zeus cntrctl[194027]: [  OK  ] Reached target Cloud-init target.
+Nov 27 13:16:32 zeus cntrctl[194027]: [  OK  ] Stopped OpenSSH Daemon.
+Nov 27 13:16:32 zeus cntrctl[194027]: [  OK  ] Started OpenSSH Daemon.
+Nov 27 13:16:33 zeus cntrctl[194027]:
+Nov 27 13:16:33 zeus cntrctl[194027]: Welcome to Photon 4.0 (x86_64) - Kernel 5.10.142-2.ph4 (console)
+```
+#### Login to the container
+```bash
+❯ sudo machinectl login photon4
+Connected to machine photon4. Press ^] three times within 1s to exit session.
+
+Welcome to Photon 4.0 (x86_64) - Kernel 5.10.142-2.ph4 (pts/1)
+photon4 login: root
+Password:
+root@photon4 [ ~ ]#
 ```
 
 ```bash
