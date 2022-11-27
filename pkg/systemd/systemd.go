@@ -6,6 +6,7 @@ package systemd
 import (
 	"context"
 	"errors"
+	"strings"
 	"time"
 
 	sd "github.com/coreos/go-systemd/v22/dbus"
@@ -21,6 +22,13 @@ const (
 type Unit struct {
 	Command string
 	Name    string
+}
+
+func (u *Unit) appendSuffixIfMissing() {
+	ok := strings.HasSuffix(u.Name, ".service")
+	if !ok {
+		u.Name += ".service"
+	}
 }
 
 func SetupContainerService(container string, network string, link string, machine string, ephemeral bool) error {
@@ -59,6 +67,8 @@ func (u *Unit) ApplyCommand() error {
 		return err
 	}
 	defer c.Close()
+
+	u.appendSuffixIfMissing()
 
 	ch := make(chan string)
 	switch u.Command {
