@@ -1,6 +1,6 @@
 ### photon-os-container-builder
 ----
-***cntrctl*** is CLI tool which spawns Photon OS in a light-weight container. It uses `systemd-nspawn` to start Photon OS containers. The primary
+***cntrctl*** spawns Photon OS image as a light-weight container. It uses `systemd-nspawn` to start Photon OS containers. The primary
 use case for ***cntrctl*** is to run Photon OS test cases in a isolated environment.
 
 Photon OS package manager ***tdnf*** integrated with ***cntrctl***. Hence it allows to prepare a root fs consisting packages depending on the user choice. It automatically prepares the root fs and boots into the container quickly. VMDK images can be automatically deployed via ***cntrctl*** and tested.
