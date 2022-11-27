@@ -7,7 +7,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/photon-os-container-builder/pkg/keyfile"
+	"github.com/vmware-samples/photon-os-container-builder/pkg/keyfile"
 )
 
 func CreateUnitFile(container string, network string, link string, machine string, ephemeral bool) error {

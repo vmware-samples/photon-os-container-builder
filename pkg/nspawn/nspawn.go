@@ -7,8 +7,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/photon-os-container-builder/pkg/conf"
-	"github.com/photon-os-container-builder/pkg/system"
+	"github.com/vmware-samples/photon-os-container-builder/pkg/conf"
+	"github.com/vmware-samples/photon-os-container-builder/pkg/system"
 )
 
 const (

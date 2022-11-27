@@ -1,29 +1,26 @@
-module github.com/photon-os-container-builder
+module github.com/vmware-samples/photon-os-container-builder
 
 go 1.19
 
 require (
-	github.com/c-robinson/iplib v1.0.3
-	github.com/fsnotify/fsnotify v1.6.0
+	github.com/coreos/go-systemd/v22 v22.5.0
+	github.com/go-ini/ini v1.67.0
+	github.com/godbus/dbus/v5 v5.1.0
+	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/viper v1.14.0
 	github.com/urfave/cli/v2 v2.23.5
-	github.com/vishvananda/netlink v1.1.0
-	github.com/vishvananda/netns v0.0.1
 	golang.org/x/sys v0.2.0
 )
 
 require (
-	github.com/coreos/go-systemd/v22 v22.5.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
-	github.com/go-ini/ini v1.67.0 // indirect
-	github.com/godbus/dbus/v5 v5.0.4 // indirect
+	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
-	github.com/sirupsen/logrus v1.9.0 // indirect
 	github.com/spf13/afero v1.9.2 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect

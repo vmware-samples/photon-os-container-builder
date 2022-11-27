@@ -11,8 +11,7 @@ import (
 
 	sd "github.com/coreos/go-systemd/v22/dbus"
 	log "github.com/sirupsen/logrus"
-
-	"github.com/photon-os-container-builder/pkg/system"
+	"github.com/vmware-samples/photon-os-container-builder/pkg/system"
 )
 
 const (

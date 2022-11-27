@@ -9,12 +9,12 @@ import (
 	"os"
 	"path"
 
-	"github.com/photon-os-container-builder/pkg/conf"
-	"github.com/photon-os-container-builder/pkg/nspawn"
-	"github.com/photon-os-container-builder/pkg/rpm"
-	"github.com/photon-os-container-builder/pkg/set"
-	"github.com/photon-os-container-builder/pkg/system"
-	"github.com/photon-os-container-builder/pkg/systemd"
+	"github.com/vmware-samples/photon-os-container-builder/pkg/conf"
+	"github.com/vmware-samples/photon-os-container-builder/pkg/nspawn"
+	"github.com/vmware-samples/photon-os-container-builder/pkg/rpm"
+	"github.com/vmware-samples/photon-os-container-builder/pkg/set"
+	"github.com/vmware-samples/photon-os-container-builder/pkg/system"
+	"github.com/vmware-samples/photon-os-container-builder/pkg/systemd"
 )
 
 func Spawn(base string, c string, release string, packages string, network string, link string, machine string, dir bool, ephemeral bool) error {
@@ -41,7 +41,7 @@ func Spawn(base string, c string, release string, packages string, network strin
 	}
 
 	// Host networking
-	if network == ""{
+	if network == "" {
 		system.DisableNetworkd(d)
 	}
 

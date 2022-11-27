@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/photon-os-container-builder/pkg/system"
+	"github.com/vmware-samples/photon-os-container-builder/pkg/system"
 )
 
 func ParseIP(ip string) (net.IP, error) {

@@ -8,10 +8,9 @@ import (
 	"os"
 
 	"github.com/urfave/cli/v2"
-
-	"github.com/photon-os-container-builder/pkg/conf"
-	"github.com/photon-os-container-builder/pkg/container"
-	"github.com/photon-os-container-builder/pkg/systemd"
+	"github.com/vmware-samples/photon-os-container-builder/pkg/conf"
+	"github.com/vmware-samples/photon-os-container-builder/pkg/container"
+	"github.com/vmware-samples/photon-os-container-builder/pkg/systemd"
 )
 
 func main() {
@@ -216,8 +215,8 @@ func main() {
 				if c.NArg() < 1 {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
-				u := systemd.Unit {
-					Name: c.Args().First(),
+				u := systemd.Unit{
+					Name:    c.Args().First(),
 					Command: "start",
 				}
 
@@ -235,8 +234,8 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				u := systemd.Unit {
-					Name: c.Args().First(),
+				u := systemd.Unit{
+					Name:    c.Args().First(),
 					Command: "stop",
 				}
 
@@ -254,8 +253,8 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				u := systemd.Unit {
-					Name: c.Args().First(),
+				u := systemd.Unit{
+					Name:    c.Args().First(),
 					Command: "restart",
 				}
 
