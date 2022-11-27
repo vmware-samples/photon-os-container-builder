@@ -6,36 +6,24 @@ package system
 import (
 	"os"
 	"path"
-)
 
-const (
-	defaultStorageDir           = "/var/lib/machines"
-	defaultUnitFilePath         = "/lib/systemd/system"
-	defaultNetworkdUnitFilePath = "/lib/systemd/network"
+	"github.com/photon-os-container-builder/pkg/keyfile"
 )
 
 func CreateUnitFile(container string, network string, link string, machine string, ephemeral bool) error {
-	unit := path.Join(defaultUnitFilePath, container) + ".service"
-
-	file, err := os.Create(unit)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	line := "[Unit]\nDescription=Photon OS container " + container + "\n" +
-		"Documentation=man:containerctl(1)\n" +
-		"Wants=modprobe@tun.service modprobe@loop.service modprobe@dm-mod.service\n" +
-		"PartOf=machines.target\n" +
-		"Before=machines.target\n" +
-		"After=network.target systemd-resolved.service modprobe@tun.service modprobe@loop.service modprobe@dm-mod.service\n\n"
-
-	_, err = file.WriteString(line)
+	m, err := keyfile.Create(path.Join("/lib/systemd/system", container+".service"))
 	if err != nil {
 		return err
 	}
 
-	execStart := "ExecStart=/usr/bin/containerctl boot "
+	m.SetKeySectionString("Unit", "Description", "Photon OS container")
+	m.SetKeySectionString("Unit", "Documentation", "man:cntrctl(1)")
+	m.SetKeySectionString("Unit", "Wants", "modprobe@tun.service modprobe@loop.service modprobe@dm-mod.service")
+	m.SetKeySectionString("Unit", "PartOf", "machines.target")
+	m.SetKeySectionString("Unit", "Before", "machines.target")
+	m.SetKeySectionString("Unit", "After", "network.target systemd-resolved.service modprobe@tun.service modprobe@loop.service modprobe@dm-mod.service")
+
+	execStart := "/usr/bin/cntrctl boot "
 	if machine != "" {
 		execStart += "-m " + machine + " "
 	}
@@ -49,47 +37,30 @@ func CreateUnitFile(container string, network string, link string, machine strin
 		execStart += "-l " + link + " "
 	}
 
-	line = "[Service]\n" +
-		execStart + container + "\n" +
-		"KillMode=mixed\n" +
-		"Type=notify \n" +
-		"RestartForceExitStatus=133 \n" +
-		"SuccessExitStatus=133 \n" +
-		"Slice=machine.slice \n" +
-		"Delegate=yes \n" +
-		"TasksMax=16384\n\n" +
-		"DevicePolicy=closed \n" +
-		"DeviceAllow=/dev/net/tun rwm \n" +
-		"DeviceAllow=char-pts rw \n" +
+	m.SetKeySectionString("Service", "ExecStart", execStart+container)
+	m.SetKeySectionString("Service", "KillMode", "mixed")
+	m.SetKeySectionString("Service", "Type", "notify")
+	m.SetKeySectionString("Service", "RestartForceExitStatus", "133")
+	m.SetKeySectionString("Service", "SuccessExitStatus", "133")
+	m.SetKeySectionString("Service", "Slice", "machine.slice")
+	m.SetKeySectionString("Service", "Delegate", "yes")
+	m.SetKeySectionString("Service", "TasksMax", "16384")
+	m.SetKeySectionString("Service", "DevicePolicy", "closed")
+	m.SetKeySectionString("Service", "DeviceAllow", "/dev/net/tun rwm")
+	m.SetKeySectionString("Service", "DeviceAllow", "char-pts rw")
+	m.SetKeySectionString("Service", "DeviceAllow", "/dev/loop-control rw")
+	m.SetKeySectionString("Service", "DeviceAllow", "block-loop rw")
+	m.SetKeySectionString("Service", "DeviceAllow", "block-blkext rw")
+	m.SetKeySectionString("Service", "DeviceAllow", "block-device-mapper rw")
+	m.SetKeySectionString("Service", "DeviceAllow", "/dev/mapper/control rw")
 
-		"# nspawn itself needs access to /dev/loop-control and /dev/loop, to implement \n" +
-		"# the --image= option. Add these here, too. \n" +
-		"DeviceAllow=/dev/loop-control rw \n" +
-		"DeviceAllow=block-loop rw \n" +
-		"DeviceAllow=block-blkext rw \n\n" +
+	m.SetKeySectionString("Install", "WantedBy", "machines.target")
 
-		"# nspawn can set up LUKS encrypted loopback files, in which case it needs \n" +
-		"# access to /dev/mapper/control and the block devices /dev/mapper/*. \n" +
-		"DeviceAllow=/dev/mapper/control rw \n" +
-		"DeviceAllow=block-device-mapper rw \n\n"
-
-	_, err = file.WriteString(line)
-	if err != nil {
-		return err
-	}
-
-	line = "[Install]\nWantedBy=machines.target\n"
-	_, err = file.WriteString(line)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return m.Save()
 }
 
 func RemoveUnitFile(container string) error {
-	unit := path.Join(defaultUnitFilePath, container) + ".service"
-
+	unit := path.Join("/lib/systemd/system", container+".service")
 	if err := os.Remove(unit); err != nil {
 		return err
 	}
@@ -97,35 +68,27 @@ func RemoveUnitFile(container string) error {
 	return nil
 }
 
-func CreateNetworkdUnitFile(container string, network string, link string) error {
-	unit := "10-" + container + ".network"
-	unit = path.Join(defaultNetworkdUnitFilePath, unit)
-	unit = path.Join(container, unit)
-	unit = path.Join(defaultStorageDir, unit)
-
-	file, err := os.Create(unit)
+func CreateNetworkUnitFile(container string, network string, link string) error {
+	u := "10-" + container + ".network"
+	m, err := keyfile.Create(path.Join("/var/lib/machines/"+container+"/lib/systemd/network", u))
 	if err != nil {
 		return err
 	}
-	defer file.Close()
-
-	line := "[Match]\nName="
 
 	if network == "ipvlan" {
-		line += "iv*\n\n[Network]\nDHCP=ipv4\n\n"
-		line += "[DHCPv4]\nRequestBroadcast=yes\n"
+		m.SetKeySectionString("Match", "Name", "iv*")
+		m.SetKeySectionString("DHCP4", "RequestBroadcast", "yes")
 	} else {
-		line += "mv*\n\n[Network]\nDHCP=ipv4\n\n"
+		m.SetKeySectionString("Match", "Name", "mv*")
 	}
 
-	_, err = file.WriteString(line)
+	m.SetKeySectionString("Network", "DHCP", "yes*")
+	m.Save()
+
+	usr, err := GetUserCredentials("systemd-network")
 	if err != nil {
 		return err
 	}
 
-	if err := os.Chmod(unit, 0644); err != nil {
-		return err
-	}
-
-	return nil
+	return os.Chown(m.Path, int(usr.Uid), int(usr.Gid))
 }

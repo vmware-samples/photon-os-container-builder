@@ -46,7 +46,7 @@ func SetupContainerService(container string, network string, link string, machin
 		return err
 	}
 
-	if err := system.CreateNetworkdUnitFile(container, network, link); err != nil {
+	if err := system.CreateNetworkUnitFile(container, network, link); err != nil {
 		return err
 	}
 
