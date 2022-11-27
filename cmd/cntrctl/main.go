@@ -216,8 +216,12 @@ func main() {
 				if c.NArg() < 1 {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
+				u := systemd.Unit {
+					Name: c.Args().First(),
+					Command: "start",
+				}
 
-				if err := systemd.Start(c.Args().First()); err != nil {
+				if err := u.ApplyCommand(); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -231,7 +235,12 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				if err := systemd.Stop(c.Args().First()); err != nil {
+				u := systemd.Unit {
+					Name: c.Args().First(),
+					Command: "stop",
+				}
+
+				if err := u.ApplyCommand(); err != nil {
 					os.Exit(1)
 				}
 				return nil
@@ -245,7 +254,12 @@ func main() {
 					cli.ShowAppHelpAndExit(c, 1)
 				}
 
-				if err := systemd.Stop(c.Args().First()); err != nil {
+				u := systemd.Unit {
+					Name: c.Args().First(),
+					Command: "restart",
+				}
+
+				if err := u.ApplyCommand(); err != nil {
 					os.Exit(1)
 				}
 				return nil
