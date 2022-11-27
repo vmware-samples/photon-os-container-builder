@@ -38,7 +38,6 @@ passwd: password updated successfully
 
 ```bash
 > ❯ sudo cntrctl boot photon4
-
 Spawning container photon4 on /var/lib/machines/photon4.
 Press ^] three times within 1s to kill container.
 systemd v247.11-4.ph4 running in system mode. (+PAM -AUDIT +SELINUX +IMA -APPARMOR +SMACK +SYSVINIT +UTMP -LIBCRYPTSETUP +GCRYPT +GNUTLS +ACL +XZ +LZ4 +ZSTD +SECCOMP +BLKID +ELFUTILS +KMOD -IDN2 -IDN -PCRE2 default-hierarchy=hybrid)
@@ -98,8 +97,11 @@ root@photon4 [ ~ ]#
 #### Creating container with macvlan network
 ```
 ❯ cntrctl spawn --network macvlan --link eth0 ph4-macvlan
-
+```
+```
 ❯ systemctl start ph4-macvlan
+```
+```
 ❯ systemctl status ph4-macvlan
 ● ph4-macvlan.service - Photon OS container
      Loaded: loaded (8;;file://zeus/usr/lib/systemd/system/ph4-macvlan.service^G/usr/lib/systemd/system/ph4-macvlan.service8;;^G; disabled; preset: enabled)
@@ -122,12 +124,16 @@ Nov 27 14:04:34 zeus cntrctl[2818]: [  OK  ] Finished Execute cloud user/final s
 Nov 27 14:04:34 zeus cntrctl[2818]: [  OK  ] Reached target Cloud-init target.
 Nov 27 14:04:35 zeus cntrctl[2818]:
 Nov 27 14:04:35 zeus cntrctl[2818]: Welcome to Photon 4.0 (x86_64) - Kernel 5.10.152-3.ph4 (console)
+```
+
+```
 ❯ machinectl login  ph4-macvlan
 Connected to machine ph4-macvlan. Press ^] three times within 1s to exit session.
 
 Welcome to Photon 4.0 (x86_64) - Kernel 5.10.152-3.ph4 (pts/1)
 ph4-macvlan login: root
 Password:
+
 root@ph4-macvlan [ ~ ]# ip a
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -137,7 +143,7 @@ root@ph4-macvlan [ ~ ]# ip a
        valid_lft forever preferred_lft forever
 2: mv-eth0@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
     link/ether 16:d3:88:53:c7:be brd ff:ff:ff:ff:ff:ff link-netnsid 0
-    inet 192.168.103.177/23 brd 10.197.103.255 scope global dynamic mv-eth0
+    inet 192.168.103.177/23 brd 192.168.103.255 scope global dynamic mv-eth0
        valid_lft 7174sec preferred_lft 7174sec
     inet6 fe80::14d3:88ff:fe53:c7be/64 scope link
        valid_lft forever preferred_lft forever
