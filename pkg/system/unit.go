@@ -81,13 +81,12 @@ func CreateNetworkUnitFile(container string, network string, link string) error 
 		m.SetKeySectionString("Match", "Name", "mv*")
 	}
 
-	m.SetKeySectionString("Network", "DHCP", "yes*")
+	m.SetKeySectionString("Network", "DHCP", "yes")
 	m.Save()
 
-	usr, err := GetUserCredentials("systemd-network")
-	if err != nil {
+	if err := os.Chmod(m.Path, 0644); err != nil {
 		return err
 	}
 
-	return os.Chown(m.Path, int(usr.Uid), int(usr.Gid))
+	return os.Chown(m.Path, 76, 76)
 }
