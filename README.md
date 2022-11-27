@@ -6,42 +6,46 @@ use case for ***cntrctl*** is to run Photon OS test cases in a isolated environm
 Photon OS package manager ***tdnf*** integrated with ***cntrctl***. Hence it allows to prepare a root fs consisting packages depending on the user choice. It automatically prepares the root fs and boots into the container quickly. VMDK images can be automatically deployed via ***cntrctl*** and tested.
 
 ```bash
-> sudo cntrctl spawn test55
-
-Refreshing metadata for: 'VMware Photon Linux 4.0 (x86_64) Updates'
+> ❯ sudo cntrctl spawn photon4
 Refreshing metadata for: 'VMware Photon Linux 4.0 (x86_64)'
+Refreshing metadata for: 'VMware Photon Linux 4.0 (x86_64) Updates'
 Refreshing metadata for: 'VMware Photon Extras 4.0 (x86_64)'
 
 Installing:
-nettle                   x86_64       3.7.2-1.ph4      photon-updates 731.22k 748769
-glib                     x86_64       2.68.0-1.ph4     photon-updates   3.53M 3697027
-coreutils-selinux        x86_64       8.32-2.ph4       photon-release   6.85M 7181874
-lz4                      x86_64       1.9.2-2.ph4      photon-updates 464.87k 476022
+filesystem               x86_64       1.1-4.ph4        photon-release   7.19k 7363
 
+Total installed size:   7.19k 7363
+
+Downloading:
+
+Testing transaction
+Running transaction
+Installing/Updating: filesystem-1.1-4.ph4.x86_64
 
 Complete!
 ```
 
 ```bash
-> sudo cntrctl dir test55
-Spawning container test55 on /var/lib/machines/test55.
+> ❯ sudo cntrctl dir photon4
+Spawning container photon4 on /var/lib/machines/photon4.
 Press ^] three times within 1s to kill container.
-root@test55 [ ~ ]#
-root@test55 [ ~ ]# passwd
+root@photon4 [ ~ ]# passwd
 New password:
+BAD PASSWORD: The password is shorter than 8 characters
 Retype new password:
 passwd: password updated successfully
-root@test55 [ ~ ]# exit
-
 ```
 
 ```bash
-> sudo cntrctl boot test55
-Spawning container test55 on /var/lib/machines/test55.
+> ❯ sudo cntrctl boot photon4
+
+Spawning container photon4 on /var/lib/machines/photon4.
 Press ^] three times within 1s to kill container.
-systemd v247.6-1.ph4 running in system mode. (+PAM -AUDIT +SELINUX +IMA -APPARMOR +SMACK +SYSVINIT +UTMP -LIBCRYPTSETUP +GCRYPT +GNUTLS +ACL +XZ +LZ4 +ZSTD +SECCOMP +BLKID +ELFUTILS +KMOD -IDN2 -IDN -PCRE2 default-hierarchy=hybrid)
+systemd v247.11-4.ph4 running in system mode. (+PAM -AUDIT +SELINUX +IMA -APPARMOR +SMACK +SYSVINIT +UTMP -LIBCRYPTSETUP +GCRYPT +GNUTLS +ACL +XZ +LZ4 +ZSTD +SECCOMP +BLKID +ELFUTILS +KMOD -IDN2 -IDN -PCRE2 default-hierarchy=hybrid)
 Detected virtualization systemd-nspawn.
 Detected architecture x86-64.
+
+Welcome to VMware Photon OS/Linux!
 
 Welcome to VMware Photon OS/Linux!
 
@@ -52,10 +56,10 @@ Welcome to VMware Photon OS/Linux!
 [  OK  ] Reached target Multi-User System.
          Starting Update UTMP about System Runlevel Changes...
 [  OK  ] Finished Update UTMP about System Runlevel Changes.
+[  OK  ] Started OpenSSH Daemon.
 
-Welcome to Photon 4.0 (x86_64) - Kernel 5.10.46-1.ph4-esx (console)
-test55 login:
-
+Welcome to Photon 4.0 (x86_64) - Kernel 5.10.142-2.ph4 (console)
+photon4 login:
 ```
 
 ```bash
