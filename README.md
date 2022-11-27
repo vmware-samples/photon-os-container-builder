@@ -44,11 +44,6 @@ Press ^] three times within 1s to kill container.
 systemd v247.11-4.ph4 running in system mode. (+PAM -AUDIT +SELINUX +IMA -APPARMOR +SMACK +SYSVINIT +UTMP -LIBCRYPTSETUP +GCRYPT +GNUTLS +ACL +XZ +LZ4 +ZSTD +SECCOMP +BLKID +ELFUTILS +KMOD -IDN2 -IDN -PCRE2 default-hierarchy=hybrid)
 Detected virtualization systemd-nspawn.
 Detected architecture x86-64.
-
-Welcome to VMware Photon OS/Linux!
-
-Welcome to VMware Photon OS/Linux!
-
 [  OK  ] Finished Permit User Sessions.
 [  OK  ] Started Console Getty.
 [  OK  ] Reached target Login Prompts.
@@ -62,6 +57,7 @@ Welcome to Photon 4.0 (x86_64) - Kernel 5.10.142-2.ph4 (console)
 photon4 login:
 ```
 
+#### Run container as systemd service
 ```bash
 ❯ sudo cntrctl start photon4
 ❯ sudo systemctl status photon4
