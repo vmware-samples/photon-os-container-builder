@@ -95,6 +95,54 @@ Password:
 root@photon4 [ ~ ]#
 ```
 
+#### Creating container with macvlan network
+```
+❯ cntrctl spawn --network macvlan --link eth0 ph4-macvlan
+
+❯ systemctl start ph4-macvlan
+❯ systemctl status ph4-macvlan
+● ph4-macvlan.service - Photon OS container
+     Loaded: loaded (8;;file://zeus/usr/lib/systemd/system/ph4-macvlan.service^G/usr/lib/systemd/system/ph4-macvlan.service8;;^G; disabled; preset: enabled)
+     Active: active (running) since Sun 2022-11-27 14:04:29 UTC; 6s ago
+       Docs: 8;;man:cntrctl(1)^Gman:cntrctl(1)8;;^G
+   Main PID: 2818 (systemd-nspawn)
+     Status: "Container running: Startup finished in 4.307s."
+      Tasks: 1 (limit: 16384)
+     Memory: 1.2M
+     CGroup: /machine.slice/ph4-macvlan.service
+             └─2818 /usr/bin/systemd-nspawn --capability=all -bD /var/lib/machines/ph4-macvlan --network-macvlan=eth0 --link-journal=try-guest -M
+
+Nov 27 14:04:33 zeus cntrctl[2818]: [  OK  ] Reached target Login Prompts.
+Nov 27 14:04:33 zeus cntrctl[2818]: [  OK  ] Reached target Multi-User System.
+Nov 27 14:04:33 zeus cntrctl[2818]:          Starting Update UTMP about System Runlevel Changes...
+Nov 27 14:04:33 zeus cntrctl[2818]: [  OK  ] Finished Update UTMP about System Runlevel Changes.
+Nov 27 14:04:33 zeus cntrctl[2818]: [  OK  ] Finished Apply the settings specified in cloud-config.
+Nov 27 14:04:33 zeus cntrctl[2818]:          Starting Execute cloud user/final scripts...
+Nov 27 14:04:34 zeus cntrctl[2818]: [  OK  ] Finished Execute cloud user/final scripts.
+Nov 27 14:04:34 zeus cntrctl[2818]: [  OK  ] Reached target Cloud-init target.
+Nov 27 14:04:35 zeus cntrctl[2818]:
+Nov 27 14:04:35 zeus cntrctl[2818]: Welcome to Photon 4.0 (x86_64) - Kernel 5.10.152-3.ph4 (console)
+❯ machinectl login  ph4-macvlan
+Connected to machine ph4-macvlan. Press ^] three times within 1s to exit session.
+
+Welcome to Photon 4.0 (x86_64) - Kernel 5.10.152-3.ph4 (pts/1)
+ph4-macvlan login: root
+Password:
+root@ph4-macvlan [ ~ ]# ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: mv-eth0@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 16:d3:88:53:c7:be brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 192.168.103.177/23 brd 10.197.103.255 scope global dynamic mv-eth0
+       valid_lft 7174sec preferred_lft 7174sec
+    inet6 fe80::14d3:88ff:fe53:c7be/64 scope link
+       valid_lft forever preferred_lft forever
+```
+
 ```bash
 > cntrctl
 NAME:
