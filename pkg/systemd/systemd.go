@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	defaultRequestTimeout = 5 * time.Second
+	defaultRequestTimeout = 10 * time.Second
 )
 
 type Unit struct {
@@ -24,6 +24,16 @@ type Unit struct {
 }
 
 func SetupContainerService(container string, network string, link string, machine string, ephemeral bool) error {
+	ctx, cancel := context.WithTimeout(context.Background(), defaultRequestTimeout)
+	defer cancel()
+
+	c, err := sd.NewSystemdConnectionContext(ctx)
+	if err != nil {
+		log.Errorf("Failed to establish connection with system bus: %v", err)
+		return err
+	}
+	defer c.Close()
+
 	if err := system.CreateUnitFile(container, network, link, machine, ephemeral); err != nil {
 		return err
 	}
@@ -32,7 +42,7 @@ func SetupContainerService(container string, network string, link string, machin
 		return err
 	}
 
-	if err := system.ExecAndRenounce("/usr/bin/systemctl", "daemon-reload"); err != nil {
+	if err := c.ReloadContext(ctx); err != nil {
 		return err
 	}
 
@@ -43,17 +53,17 @@ func (u *Unit) ApplyCommand() error {
 	ctx, cancel := context.WithTimeout(context.Background(), defaultRequestTimeout)
 	defer cancel()
 
-	conn, err := sd.NewSystemdConnectionContext(ctx)
+	c, err := sd.NewSystemdConnectionContext(ctx)
 	if err != nil {
 		log.Errorf("Failed to establish connection with system bus: %v", err)
 		return err
 	}
-	defer conn.Close()
+	defer c.Close()
 
-	c := make(chan string)
+	ch := make(chan string)
 	switch u.Command {
 	case "start":
-		jid, err := conn.StartUnitContext(ctx, u.Name, "replace", c)
+		jid, err := c.StartUnitContext(ctx, u.Name, "replace", ch)
 		if err != nil {
 			log.Errorf("Failed to start systemd unit='%s': %v", u.Name, err)
 			return err
@@ -62,7 +72,7 @@ func (u *Unit) ApplyCommand() error {
 		log.Debugf("Successfully executed 'start' on systemd unit='%s' job_id='%d'", u.Name, jid)
 
 	case "stop":
-		jid, err := conn.StopUnitContext(ctx, u.Name, "fail", c)
+		jid, err := c.StopUnitContext(ctx, u.Name, "fail", ch)
 		if err != nil {
 			log.Errorf("Failed to stop systemd unit='%s': %v", u.Name, err)
 			return err
@@ -71,7 +81,7 @@ func (u *Unit) ApplyCommand() error {
 		log.Debugf("Successfully executed 'stop' on systemd unit='%s' job_id='%d'", u.Name, jid)
 
 	case "restart":
-		jid, err := conn.RestartUnitContext(ctx, u.Name, "replace", c)
+		jid, err := c.RestartUnitContext(ctx, u.Name, "replace", ch)
 		if err != nil {
 			log.Errorf("Failed to restart systemd unit='%s': %v", u.Name, err)
 			return err
@@ -80,7 +90,7 @@ func (u *Unit) ApplyCommand() error {
 		log.Debugf("Successfully executed 'restart' on systemd unit='%s' job_id='%d'", u.Name, jid)
 
 	case "try-restart":
-		jid, err := conn.TryRestartUnitContext(ctx, u.Name, "replace", c)
+		jid, err := c.TryRestartUnitContext(ctx, u.Name, "replace", ch)
 		if err != nil {
 			log.Errorf("Failed to try restart systemd unit='%s': %v", u.Name, err)
 			return err
@@ -89,7 +99,7 @@ func (u *Unit) ApplyCommand() error {
 		log.Debugf("Successfully executed 'try-restart' on systemd unit='%s' job_id='%d'", u.Name, jid)
 
 	case "reload-or-restart":
-		jid, err := conn.ReloadOrRestartUnitContext(ctx, u.Name, "replace", c)
+		jid, err := c.ReloadOrRestartUnitContext(ctx, u.Name, "replace", ch)
 		if err != nil {
 			log.Errorf("Failed to reload or restart systemd unit='%s': %v", u.Name, err)
 			return err
@@ -98,7 +108,7 @@ func (u *Unit) ApplyCommand() error {
 		log.Debugf("Successfully executed 'reload-or-restart' on systemd unit='%s' job_id='%d'", u.Name, jid)
 
 	case "reload":
-		jid, err := conn.ReloadUnitContext(ctx, u.Name, "replace", c)
+		jid, err := c.ReloadUnitContext(ctx, u.Name, "replace", ch)
 		if err != nil {
 			log.Errorf("Failed to reload systemd unit='%s': %v", u.Name, err)
 			return err
@@ -107,7 +117,7 @@ func (u *Unit) ApplyCommand() error {
 		log.Debugf("Successfully executed 'reload' on systemd unit='%s' job_id='%d'", u.Name, jid)
 
 	case "enable":
-		install, changes, err := conn.EnableUnitFilesContext(ctx, []string{u.Name}, false, true)
+		install, changes, err := c.EnableUnitFilesContext(ctx, []string{u.Name}, false, true)
 		if err != nil {
 			log.Errorf("Failed to enable systemd unit='%s': %v", u.Name, err)
 			return err
@@ -116,7 +126,7 @@ func (u *Unit) ApplyCommand() error {
 		log.Debugf("Successfully executed 'enable' on systemd unit='%s' install='%t' changes='%s'", u.Name, install, changes)
 
 	case "disable":
-		changes, err := conn.DisableUnitFilesContext(ctx, []string{u.Name}, false)
+		changes, err := c.DisableUnitFilesContext(ctx, []string{u.Name}, false)
 		if err != nil {
 			log.Errorf("Failed to disable systemd unit='%s': %v", u.Name, err)
 			return err
@@ -125,7 +135,7 @@ func (u *Unit) ApplyCommand() error {
 		log.Debugf("Successfully executed 'disable' on systemd unit='%s' changes='%s'", u.Name, changes)
 
 	case "mask":
-		changes, err := conn.MaskUnitFilesContext(ctx, []string{u.Name}, false, true)
+		changes, err := c.MaskUnitFilesContext(ctx, []string{u.Name}, false, true)
 		if err != nil {
 			log.Errorf("Failed to mask systemd unit='%s': %v", u.Name, err)
 			return err
@@ -134,7 +144,7 @@ func (u *Unit) ApplyCommand() error {
 		log.Debugf("Successfully executed 'mask' on systemd unit='%s' changes='%s'", u.Name, changes)
 
 	case "unmask":
-		changes, err := conn.UnmaskUnitFilesContext(ctx, []string{u.Name}, false)
+		changes, err := c.UnmaskUnitFilesContext(ctx, []string{u.Name}, false)
 		if err != nil {
 			log.Errorf("Failed to unmask systemd unit='%s': %v", u.Name, err)
 			return err
