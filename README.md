@@ -5,8 +5,25 @@ use case for ***cntrctl*** is to run Photon OS test cases in a isolated environm
 
 Photon OS package manager ***tdnf*** integrated with ***cntrctl***. Hence it allows to prepare a root fs consisting packages depending on the user choice. It automatically prepares the root fs and boots into the container quickly. VMDK images can be automatically deployed via ***cntrctl*** and tested.
 
+Install systemd-container
 ```bash
-> ❯ sudo cntrctl spawn photon4
+❯ sudo tdnf install systemd-container -y
+Installing:
+systemd-container                                                x86_64                     5.10-1.ph4                          photon-release              1.65M 1728537
+
+Total installed size:   1.65M 1728537
+
+Downloading:
+systemd-container                                  478107 100%
+Testing transaction
+Running transaction
+Installing/Updating: systemd-container-247.11-4.ph4
+
+Complete!
+```
+
+```bash
+❯ sudo cntrctl spawn photon4
 Refreshing metadata for: 'VMware Photon Linux 4.0 (x86_64)'
 Refreshing metadata for: 'VMware Photon Linux 4.0 (x86_64) Updates'
 Refreshing metadata for: 'VMware Photon Extras 4.0 (x86_64)'
