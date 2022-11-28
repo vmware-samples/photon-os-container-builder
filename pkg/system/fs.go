@@ -26,7 +26,7 @@ func DisableNetworkd(c string) {
 	os.Remove(path.Join(c, NetworkdSocket))
 }
 
-func RecursesiveChmod(path string, mode os.FileMode) error {
+func RecursiveChmod(path string, mode os.FileMode) error {
 	err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err

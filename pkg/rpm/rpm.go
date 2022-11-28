@@ -30,7 +30,7 @@ func ConstructOSTree(release string, target string, packages set.Set) error {
 		return err
 	}
 
-	if err := system.RecursesiveChmod(target, 0755); err != nil {
+	if err := system.RecursiveChmod(target, 0755); err != nil {
 		return err
 	}
 
@@ -44,7 +44,7 @@ func installPackages(release string, target string, packages set.Set) error {
 		release = "--releasever=" + release
 	}
 	for pkg := range packages.M {
-		system.ExecAndShowProgess(TDNFCli, release, "--installroot", target, "install", pkg, "-y")
+		system.ExecAndShowProgress(TDNFCli, release, "--installroot", target, "install", pkg, "-y")
 	}
 
 	return nil

@@ -50,7 +50,7 @@ func ExecRun(cmd string, args ...string) error {
 	return nil
 }
 
-func ExecAndShowProgess(cmd string, args ...string) error {
+func ExecAndShowProgress(cmd string, args ...string) error {
 	c := exec.Command(cmd, args...)
 
 	var stdoutBuf, stderrBuf bytes.Buffer
