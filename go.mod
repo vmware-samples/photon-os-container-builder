@@ -8,7 +8,7 @@ require (
 	github.com/godbus/dbus/v5 v5.1.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/viper v1.14.0
-	github.com/urfave/cli/v2 v2.23.7
+	github.com/urfave/cli/v2 v2.24.1
 	golang.org/x/sys v0.4.0
 )
 
