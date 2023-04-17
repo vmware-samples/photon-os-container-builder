@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/urfave/cli/v2"
+
 	"github.com/vmware-samples/photon-os-container-builder/pkg/conf"
 	"github.com/vmware-samples/photon-os-container-builder/pkg/container"
 	"github.com/vmware-samples/photon-os-container-builder/pkg/systemd"
@@ -93,6 +94,10 @@ func main() {
 				} else if link != "" && network == "" {
 					fmt.Printf("link='%s' is specified but network is missing", link)
 					os.Exit(1)
+				}
+
+				if release == "" {
+					release = cfg.System.Release
 				}
 
 				if c.String("packages") == "" {

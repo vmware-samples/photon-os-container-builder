@@ -1,6 +1,6 @@
 module github.com/vmware-samples/photon-os-container-builder
 
-go 1.19
+go 1.20
 
 require (
 	github.com/coreos/go-systemd/v22 v22.5.0
