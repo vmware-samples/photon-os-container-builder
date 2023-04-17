@@ -11,7 +11,7 @@ import (
 
 const (
 	DefaultLogLevel       = "info"
-	DefaultReleaseVersion = "4.0"
+	DefaultReleaseVersion = "5.0"
 	DefaultStorageDir     = "/var/lib/machines"
 	DefaultUnitFilePath   = "/etc/systemd/system"
 	DefaultGPGDir         = "/etc/pki/rpm-gpg"

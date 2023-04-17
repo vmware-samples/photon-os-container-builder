@@ -1,5 +1,5 @@
 [System]
 #LogLevel="info"
 #Packages="systemd,dbus,iproute2,tdnf,photon-release,photon-repos,curl,shadow,ncurses-terminfo,iputils"
-#Release="4.0"
+#Release="5.0"
 
