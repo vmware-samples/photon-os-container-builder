@@ -9,7 +9,7 @@ require (
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/viper v1.15.0
 	github.com/urfave/cli/v2 v2.25.3
-	golang.org/x/sys v0.7.0
+	golang.org/x/sys v0.8.0
 )
 
 require (
