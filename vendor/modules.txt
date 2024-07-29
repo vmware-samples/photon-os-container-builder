@@ -82,10 +82,10 @@ github.com/spf13/viper/internal/features
 # github.com/subosito/gotenv v1.6.0
 ## explicit; go 1.18
 github.com/subosito/gotenv
-# github.com/urfave/cli/v2 v2.27.2
+# github.com/urfave/cli/v2 v2.27.3
 ## explicit; go 1.18
 github.com/urfave/cli/v2
-# github.com/xrash/smetrics v0.0.0-20240312152122-5f08fbb34913
+# github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1
 ## explicit; go 1.15
 github.com/xrash/smetrics
 # go.uber.org/atomic v1.9.0
